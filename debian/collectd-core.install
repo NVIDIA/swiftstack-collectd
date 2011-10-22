@@ -2,9 +2,11 @@
 ../../contrib/rrd_filter.px usr/lib/collectd/utils
 ../collection.conf etc/collectd/
 usr/lib/collectd/*.so
+usr/bin
 usr/sbin
 usr/share/collectd
 usr/share/man/man1/collectdmon.1
+usr/share/man/man1/collectdctl.1
 usr/share/man/man1/collectd.1
 usr/share/man/man3/Collectd::Unixsock.3pm
 usr/share/man/man5/collectd-*.5

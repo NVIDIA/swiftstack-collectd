@@ -1,3 +1,9 @@
+collectd (5.0.1-1) testing-proposed-updates; urgency=high
+
+  * Upgrade to version 5.x
+
+ -- Jens Braeuer <braeuer.jens@googlemail.com>  Sat, 21 Oct 2011 17:46:44 +1100
+
 collectd (4.10.1-1+squeeze2) testing-proposed-updates; urgency=high
 
   * Non-maintainer upload by the security team

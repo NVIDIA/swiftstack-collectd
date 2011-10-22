@@ -2,6 +2,7 @@
 # debian/rules for collectd
 #
 # Written by Sebastian Harl <tokkee@debian.org>.
+# Written by Jens Braeuer <braeuer.jens@googlemail.com>.
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -56,8 +57,13 @@ confflags = --host=$(DEB_HOST_GNU_TYPE) \
 			--with-perl-bindings="INSTALLDIRS=vendor" \
 			--without-libstatgrab \
 			--without-included-ltdl \
+			--enable-all-plugins \
 			--disable-static \
-			--enable-all-plugins
+			--disable-amqp \
+			--disable-lpar \
+			--disable-redis \
+			--disable-varnish \
+			--disable-write_redis
 
 # These plugins do not provide any functionality under Linux.
 confflags += --disable-apple_sensors --disable-tape
