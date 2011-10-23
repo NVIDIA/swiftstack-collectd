@@ -140,6 +140,9 @@ ifneq (,$(filter hppa, $(DEB_BUILD_ARCH)))
 	confflags += --disable-java
 endif
 
+configure: build.sh configure.in
+	./build.sh
+
 config.status: configure $(DPATCH_STAMPFN)
 	dh_testdir
 	
