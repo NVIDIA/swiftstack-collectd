@@ -1,3 +1,9 @@
+collectd (5.0.1-2) testing-proposed-updates; urgency=high
+
+  * Fix collectd-utils package
+
+ -- Jens Braeuer <braeuer.jens@googlemail.com>  Sun, 22 Oct 2011 17:46:44 +1100
+
 collectd (5.0.1-1) testing-proposed-updates; urgency=high
 
   * Upgrade to version 5.x

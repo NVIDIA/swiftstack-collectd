@@ -2,7 +2,7 @@
 ../../contrib/rrd_filter.px usr/lib/collectd/utils
 ../collection.conf etc/collectd/
 usr/lib/collectd/*.so
-usr/bin
+usr/bin/collectdctl
 usr/sbin
 usr/share/collectd
 usr/share/man/man1/collectdmon.1
