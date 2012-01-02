@@ -72,3 +72,6 @@ src/tags
 
 # backup stuff
 *~
+
+#vim droppings
+*.swp
