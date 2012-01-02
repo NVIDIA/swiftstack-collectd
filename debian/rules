@@ -162,6 +162,12 @@ config.status: configure $(DPATCH_STAMPFN)
 	./configure $(confflags) CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" \
 		JAVAC="$(JAVAC)" JAR="$(JAR)" JAVA_CPPFLAGS="$(JAVA_CPPFLAGS)" \
 		JAVA_LDFLAGS="$(JAVA_LDFLAGS)" \
+                --disable-ascent --disable-curl_json --disable-curl_xml \
+                --disable-dbi --disable-gmond --disable-java --disable-libvirt \
+                --disable-mysql --disable-notify_desktop --disable-notify_email \
+                --disable-perl --disable-pinba --disable-ping --disable-rrdcached \
+                --disable-rrdtool --disable-snmp --disable-tokyotyrant \
+                --disable-bind \
 		|| ( status=$$?; cat config.log; exit $$status )
 
 build: build-stamp
