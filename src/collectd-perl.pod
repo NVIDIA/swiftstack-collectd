@@ -656,9 +656,9 @@ A very simple read function might look like:
 
   sub foobar_read
   {
-    my $vl = { plugin => 'foobar', type => 'gauge' };
+    my $vl = { plugin => 'foobar' };
     $vl->{'values'} = [ rand(42) ];
-    plugin_dispatch_values ($vl);
+    plugin_dispatch_values ('gauge', $vl);
     return 1;
   }
 

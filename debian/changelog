@@ -1,3 +1,12 @@
+collectd (5.0.1-2.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Initial packaging for SwiftStack.
+  * Fix parsing of process names
+  * Pull in upstream perl example fix.
+
+ -- Darrell Bishop <darrell@swiftstack.com>  Wed, 04 Jan 2012 01:11:27 +0000
+
 collectd (5.0.1-2) testing-proposed-updates; urgency=high
 
   * Fix collectd-utils package
