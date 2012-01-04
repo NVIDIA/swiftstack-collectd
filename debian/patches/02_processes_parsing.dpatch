@@ -1,3 +1,11 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 02_processes_parsing.dpatch by  <vagrant@natty.talifun.com>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix process name parsing.
+
+@DPATCH@
+
 diff --git a/src/processes.c b/src/processes.c
 index 8f4eb88..c9a439e 100644
 --- a/src/processes.c
