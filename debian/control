@@ -1,32 +1,53 @@
-Source: ss-collectd
+Source: collectd
 Section: utils
 Priority: optional
-Maintainer: Joe Arnold <contact@swiftstack.com>
+Maintainer: Sebastian Harl <tokkee@debian.org>
 Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.10), po-debconf, dpatch,
  bison, flex, autotools-dev, libltdl-dev, pkg-config,
  iproute-dev [!alpha !amd64 !hppa !ia64 !ppc64 !mips !mipsel !kfreebsd-i386 !kfreebsd-amd64],
  iptables-dev (>= 1.4.3.2-2) [!kfreebsd-i386 !kfreebsd-amd64],
  libcurl4-gnutls-dev,
+ libdbi0-dev,
+ libesmtp-dev,
+ libganglia1-dev (>= 3) [!kfreebsd-i386 !kfreebsd-amd64],
  libgcrypt11-dev,
  libglib2.0-dev,
+ libvarnish-dev,
  libhal-dev,
  libmemcached-dev,
+ libmysqlclient-dev,
+ libnotify-dev,
  libopenipmi-dev,
+ liboping-dev (>= 0.3.3),
  libpcap-dev,
+ libperl-dev,
  libpq-dev,
+ libprotobuf-c0-dev,
+ librrd-dev (>= 1.4~),
  libsensors4-dev [!kfreebsd-i386 !kfreebsd-amd64],
+ libsnmp-dev,
+ perl,
+ libtokyocabinet-dev [!kfreebsd-i386 !kfreebsd-amd64],
+ libtokyotyrant-dev [!kfreebsd-i386 !kfreebsd-amd64],
  libupsclient1-dev,
+ libvirt-dev (>= 0.4.0-6) [!kfreebsd-i386 !kfreebsd-amd64],
+ libxml2-dev,
+ libyajl-dev,
  linux-libc-dev (>= 2.6.25-4) [!kfreebsd-i386 !kfreebsd-amd64] | linux-libc-dev (<< 2.6.25-1) [!kfreebsd-i386 !kfreebsd-amd64],
+ openjdk-6-jdk [!hppa !kfreebsd-i386 !kfreebsd-amd64],
+ protobuf-c-compiler,
  python-dev
 Build-Conflicts: libpthread-dev
 Standards-Version: 3.9.1
 Homepage: http://collectd.org/
+Vcs-Git: git://git.tokkee.org/pkg-collectd.git
+Vcs-Browser: http://git.tokkee.org/?p=pkg-collectd.git
 
-Package: ss-collectd-core
+Package: collectd-core
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: perl, rrdtool
-Suggests: ss-collectd-dev,
+Suggests: collectd-dev,
 # collection.cgi / collection3 dependencies
  librrds-perl, liburi-perl, libhtml-parser-perl, libregexp-common-perl,
  libconfig-general-perl, httpd-cgi,
@@ -35,8 +56,7 @@ Suggests: ss-collectd-dev,
  memcached, mysql-server, nginx, notification-daemon, nut, openvpn, olsrd,
  pdns-server, postgresql, time-daemon,
  ${shlibs:Suggests}
-Conflicts: collectd
-Replaces: collectd
+Replaces: collectd (<< 4.8.2-1~)
 Description: statistics collection and monitoring daemon (core system)
  collectd is a small daemon which collects system information periodically and
  provides mechanisms to monitor and store the values in a variety of ways.
@@ -139,9 +159,9 @@ Description: statistics collection and monitoring daemon (core system)
    * wireless network stats: wireless
    * send collected values to a web-server: write_http
 
-Package: ss-collectd
+Package: collectd
 Architecture: any
-Depends: ss-collectd-core, ${shlibs:Depends}, ${misc:Depends}
+Depends: collectd-core, ${shlibs:Depends}, ${misc:Depends}
 Recommends: ${shlibs:Recommends}
 Description: statistics collection and monitoring daemon
  collectd is a small daemon which collects system information periodically and
@@ -158,10 +178,10 @@ Description: statistics collection and monitoring daemon
  allows sites to, e.g., provide customizations (like a custom default
  configuration) on top of it without having to modify the "collectd" package.
 
-Package: ss-collectd-utils
+Package: collectd-utils
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: ss-collectd
+Recommends: collectd
 Suggests: nagios3 | nagios2
 Replaces: collectd (<< 4.6.1-1~)
 Description: statistics collection and monitoring daemon (utilities)
@@ -175,13 +195,13 @@ Description: statistics collection and monitoring daemon (utilities)
  .
    * collectd-nagios: Nagios plugin for querying collectd
 
-Package: ss-collectd-dbg
+Package: collectd-dbg
 Section: debug
 Architecture: any
 Priority: extra
-Depends: ss-collectd-core (= ${binary:Version}), ${misc:Depends}
-Recommends: ss-collectd-utils (= ${binary:Version}),
- ss-libcollectdclient0 (= ${binary:Version})
+Depends: collectd-core (= ${binary:Version}), ${misc:Depends}
+Recommends: collectd-utils (= ${binary:Version}),
+ libcollectdclient0 (= ${binary:Version})
 Description: statistics collection and monitoring daemon (debugging symbols)
  collectd is a small daemon which collects system information periodically and
  provides mechanisms to monitor and store the values in a variety of ways.
@@ -191,9 +211,9 @@ Description: statistics collection and monitoring daemon (debugging symbols)
  .
  This package contains the debugging symbols.
 
-Package: ss-collectd-dev
+Package: collectd-dev
 Architecture: all
-Depends: ss-collectd-core (= ${source:Version}), ${misc:Depends}
+Depends: collectd-core (= ${source:Version}), ${misc:Depends}
 Description: statistics collection and monitoring daemon (development files)
  collectd is a small daemon which collects system information periodically and
  provides mechanisms to monitor and store the values in a variety of ways.
@@ -204,10 +224,10 @@ Description: statistics collection and monitoring daemon (development files)
  This package contains the development files needed to create your own
  plugins.
 
-Package: ss-libcollectdclient-dev
+Package: libcollectdclient-dev
 Section: libdevel
 Architecture: any
-Depends: ss-libcollectdclient0 (= ${binary:Version}), ${misc:Depends}
+Depends: libcollectdclient0 (= ${binary:Version}), ${misc:Depends}
 Description: client library for collectd's control interface (development files)
  libcollectdclient provides an API to access the control interface provided by
  the unixsock plugin of collectd, a statistics collection and monitoring
@@ -217,11 +237,11 @@ Description: client library for collectd's control interface (development files)
  .
  This package contains the header files and the static library.
 
-Package: ss-libcollectdclient0
+Package: libcollectdclient0
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: ss-collectd
+Recommends: collectd
 Description: client library for collectd's control interface
  libcollectdclient provides an API to access the control interface provided by
  the unixsock plugin of collectd, a statistics collection and monitoring

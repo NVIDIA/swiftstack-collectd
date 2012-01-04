@@ -377,7 +377,6 @@ Licenses:
 	Copyright © 2009 Andrés J. Díaz <ajdiaz@connectical.com>
 	Copyright © 2009 Manuel Sanmartin
 	Copyright © 2010 Clément Stenac <clement.stenac@diwi.org>
-	Copyright © 2012 Darrell Bishop <darrell@swiftstack.com>
 	License: GNU General Public License
 
 	File src/rrdtool.c
