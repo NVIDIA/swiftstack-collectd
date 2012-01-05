@@ -175,7 +175,7 @@ build: build-stamp
 build-stamp: config.status
 	dh_testdir
 	
-	$(MAKE)
+	$(MAKE) BUILD_WITH_LIBIPTC_LDFLAGS="-lip4tc -lip6tc"
 	perl ./debian/bin/check_plugins.pl
 	
 	touch build-stamp

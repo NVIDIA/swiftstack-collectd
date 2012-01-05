@@ -1,4 +1,4 @@
-collectd (5.0.1-3ss4~natty1) natty; urgency=low
+collectd (5.0.1-3ss5~natty1) natty; urgency=low
 
   * Forgot to bring over a flag we passed into the "make"
     invocation to get iptables linking set up properly.
