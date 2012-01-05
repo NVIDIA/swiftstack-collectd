@@ -208,7 +208,7 @@ install-arch: build
 	dh_prep
 	dh_installdirs -a
 	
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp BUILD_WITH_LIBIPTC_LDFLAGS="-lip4tc -lip6tc"
 	
 	rm -f debian/tmp/usr/lib/collectd/*.la
 	rm -f debian/tmp/usr/lib/libcollectdclient.la

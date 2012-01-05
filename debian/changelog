@@ -1,3 +1,10 @@
+collectd (5.0.1-3ss4~natty1) natty; urgency=low
+
+  * Forgot to bring over a flag we passed into the "make"
+    invocation to get iptables linking set up properly.
+
+ -- Darrell Bishop <darrell@swiftstack.com>  Wed, 04 Jan 2012 23:44:26 +0000
+
 collectd (5.0.1-3ss3~natty1) natty; urgency=low
 
   * Initial packaging for SwiftStack.
