@@ -1,3 +1,9 @@
+collectd (5.0.1-3ss6~natty1) natty; urgency=low
+
+  * Moved perl & rrdtool from Recommends: to Suggests:
+
+ -- Darrell Bishop <darrell@swiftstack.com> Fri, 06 Jan 2012 07:46:34 -0800
+
 collectd (5.0.1-3ss5~natty1) natty; urgency=low
 
   * Forgot to bring over a flag we passed into the "make"

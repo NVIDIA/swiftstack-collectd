@@ -1,5 +1,5 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## 02_processes_parsing.dpatch by  <vagrant@natty.talifun.com>
+## 02_processes_parsing.dpatch by  <darrell@swiftstack.com>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
 ## DP: Fix process name parsing.

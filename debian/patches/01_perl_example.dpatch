@@ -1,5 +1,5 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## 01_perl_example.dpatch by  <vagrant@natty.talifun.com>
+## 01_perl_example.dpatch by  <octo@collectd.org>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
 ## DP: Fix example Perl script.
