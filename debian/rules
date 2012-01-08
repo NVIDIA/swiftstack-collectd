@@ -162,6 +162,7 @@ config.status: configure $(DPATCH_STAMPFN)
 	./configure $(confflags) CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" \
 		JAVAC="$(JAVAC)" JAR="$(JAR)" JAVA_CPPFLAGS="$(JAVA_CPPFLAGS)" \
 		JAVA_LDFLAGS="$(JAVA_LDFLAGS)" \
+                --with-libiptc=/ \
                 --disable-ascent --disable-curl_json --disable-curl_xml \
                 --disable-dbi --disable-gmond --disable-java --disable-libvirt \
                 --disable-mysql --disable-notify_desktop --disable-notify_email \
@@ -175,7 +176,7 @@ build: build-stamp
 build-stamp: config.status
 	dh_testdir
 	
-	$(MAKE) BUILD_WITH_LIBIPTC_LDFLAGS="-lip4tc -lip6tc"
+	$(MAKE)
 	perl ./debian/bin/check_plugins.pl
 	
 	touch build-stamp
@@ -208,7 +209,7 @@ install-arch: build
 	dh_prep
 	dh_installdirs -a
 	
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp BUILD_WITH_LIBIPTC_LDFLAGS="-lip4tc -lip6tc"
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 	
 	rm -f debian/tmp/usr/lib/collectd/*.la
 	rm -f debian/tmp/usr/lib/libcollectdclient.la

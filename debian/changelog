@@ -1,17 +1,18 @@
-collectd (5.0.1-3ss6~natty1) natty; urgency=low
+collectd (5.0.1-3ss10~oneiric) oneiric; urgency=low
 
+  * Fixed build for oneiric (configure --with-libiptc=/)
   * Moved perl & rrdtool from Recommends: to Suggests:
 
  -- Darrell Bishop <darrell@swiftstack.com>  Fri, 06 Jan 2012 07:46:34 -0800
 
-collectd (5.0.1-3ss5~natty1) natty; urgency=low
+collectd (5.0.1-3ss5~oneiric) oneiric; urgency=low
 
   * Forgot to bring over a flag we passed into the "make"
     invocation to get iptables linking set up properly.
 
  -- Darrell Bishop <darrell@swiftstack.com>  Wed, 04 Jan 2012 23:44:26 +0000
 
-collectd (5.0.1-3ss3~natty1) natty; urgency=low
+collectd (5.0.1-3ss3~oneiric) oneiric; urgency=low
 
   * Initial packaging for SwiftStack.
   * Fix parsing of process names
