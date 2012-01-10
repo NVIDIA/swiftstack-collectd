@@ -1,6 +1,6 @@
-collectd (5.0.1-3ss10~oneiric) oneiric; urgency=low
+collectd (5.0.1-3ss11~oneiric) oneiric; urgency=low
 
-  * Fixed build for oneiric (configure --with-libiptc=/)
+  * Fixed build for oneiric (last time?)
   * Moved perl & rrdtool from Recommends: to Suggests:
 
  -- Darrell Bishop <darrell@swiftstack.com>  Fri, 06 Jan 2012 07:46:34 -0800
