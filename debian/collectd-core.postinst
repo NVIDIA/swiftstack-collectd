@@ -40,6 +40,8 @@ case "$1" in
             # this is only available on Solaris using libkstat
             rm -f /var/lib/collectd/rrd/$hostname/swap/swap-reserved.rrd
         fi
+        # SwiftStack uses upstart to manage collectd; restart it on upgrade
+        (restart collectd || start collectd ||:) > /dev/null  # ignore failues
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

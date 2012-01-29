@@ -1,3 +1,13 @@
+collectd (5.0.1-4ss1) oneiric; urgency=low
+
+  * Fixed bug in memcached plugin where read buffer was too
+    small (1024 bytes vs. our received 1048 or so bytes from
+    our running memcached server).
+  * Bumped packaging number since this is a code change, not
+    packaging change.  Also removed the oneiric launchpad-ism.
+
+ -- Darrell Bishop <darrell@swiftstack.com>  Sat, 28 Jan 2012 09:15:20 -0800
+
 collectd (5.0.1-3ss12~oneiric) oneiric; urgency=low
 
   * Fixed build for oneiric (last time?)
