@@ -1,3 +1,10 @@
+collectd (5.0.2-1ss1) oneiric; urgency=low
+
+  * Merging in upstream 5.0.2 (includes memory leak fix when dispatching to
+    the python plugin).
+
+ -- Darrell Bishop <darrell@swiftstack.com>  Sun, 29 Jan 2012 17:16:40 -0800
+
 collectd (5.0.1-4ss1) oneiric; urgency=low
 
   * Fixed bug in memcached plugin where read buffer was too

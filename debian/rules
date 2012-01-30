@@ -140,6 +140,10 @@ ifneq (,$(filter hppa, $(DEB_BUILD_ARCH)))
 	confflags += --disable-java
 endif
 
+build.sh:
+	cp debian/build.sh .
+	chmod a+x build.sh
+
 configure: build.sh configure.in
 	./build.sh
 
