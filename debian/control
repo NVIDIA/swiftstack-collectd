@@ -31,7 +31,7 @@ Vcs-Browser: https://github.com/swiftstack/collectd
 
 Package: collectd-core
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, python-ss-statsd
 Suggests: collectd-dev,
 # collection.cgi / collection3 dependencies
  perl,
