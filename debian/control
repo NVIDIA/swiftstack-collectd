@@ -31,15 +31,15 @@ Vcs-Browser: https://github.com/swiftstack/collectd
 
 Package: collectd-core
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, python-ss-statsd
+Depends: ${shlibs:Depends}, ${misc:Depends}, python-ss-statsd, apcupsd,
+ hddtemp, iptables, ipvsadm, lm-sensors, mbmon, memcached, openvpn
 Suggests: collectd-dev,
 # collection.cgi / collection3 dependencies
  perl,
  librrds-perl, liburi-perl, libhtml-parser-perl, libregexp-common-perl,
  libconfig-general-perl, httpd-cgi,
 # services providing data that may be collected by collectd
- apache2, apcupsd, bind9, hddtemp, iptables, ipvsadm, lm-sensors, mbmon,
- memcached, mysql-server, nginx, notification-daemon, nut, openvpn, olsrd,
+ apache2, bind9, mysql-server, nginx, notification-daemon, nut, olsrd,
  pdns-server, postgresql, time-daemon,
 # writers
  rrdtool,

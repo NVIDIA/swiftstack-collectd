@@ -1,6 +1,7 @@
-collectd (5.0.2-1ss2) oneiric; urgency=low
+collectd (5.0.2-1ss3) oneiric; urgency=low
 
   * Adding dependency on our packaging of pystatsd (python-ss-statsd)
+  * Various other dependency tweaks.
 
  -- Darrell Bishop <darrell@swiftstack.com>  Thu, 05 Apr 2012 19:32:16 -0700
 
