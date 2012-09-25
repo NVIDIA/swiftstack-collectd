@@ -34,7 +34,7 @@ Package: collectd-core
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, python-ss-statsd, apcupsd,
  hddtemp, iptables, ipvsadm, lm-sensors, mbmon, memcached, openvpn,
- liboping
+ liboping0
 Suggests: collectd-dev,
 # collection.cgi / collection3 dependencies
  perl,

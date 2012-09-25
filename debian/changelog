@@ -1,3 +1,9 @@
+collectd (5.0.2-1ss5) oneiric; urgency=low
+
+  * Fix busted dependency.
+
+ -- Sam Merritt <sam@swiftstack.com>  Tue, 25 Sep 2012 16:46:31 -0700
+
 collectd (5.0.2-1ss4) oneiric; urgency=low
 
   * Enable the ping plugin.
