@@ -1,3 +1,9 @@
+collectd (5.0.2-1ss6) oneiric; urgency=low
+
+  * Move hddtemp from Depends back into Suggests.
+
+ -- SwiftStack Inc. <contact@swiftstack.net>  Thu, 27 Sep 2012 15:05:13 -0700
+
 collectd (5.0.2-1ss5) oneiric; urgency=low
 
   * Fix busted dependency.
