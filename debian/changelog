@@ -1,3 +1,9 @@
+collectd (5.0.2-1ss7) oneiric; urgency=low
+
+  * Depend on ss-python-statsd, not python-ss-statsd.
+
+ -- SwiftStack Inc. <contact@swiftstack.net>  Mon, 12 Nov 2012 16:18:21 -0800
+
 collectd (5.0.2-1ss6) oneiric; urgency=low
 
   * Move hddtemp from Depends back into Suggests.

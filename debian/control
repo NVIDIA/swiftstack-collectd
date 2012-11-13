@@ -32,7 +32,7 @@ Vcs-Browser: https://github.com/swiftstack/collectd
 
 Package: collectd-core
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, python-ss-statsd, apcupsd,
+Depends: ${shlibs:Depends}, ${misc:Depends}, ss-python-statsd, apcupsd,
  iptables, ipvsadm, lm-sensors, mbmon, memcached, openvpn,
  liboping0
 Suggests: collectd-dev,
