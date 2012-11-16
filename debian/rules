@@ -51,9 +51,9 @@ JAVA_LDFLAGS = -L$(JAVA_LIBDIR) -Wl,-rpath -Wl,$(JAVA_LIBDIR)
 include /usr/share/dpatch/dpatch.make
 
 confflags = --host=$(DEB_HOST_GNU_TYPE) \
-			--build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr \
+			--build=$(DEB_BUILD_GNU_TYPE) --prefix=/opt/ss \
 			--mandir=\$${prefix}/share/man \
-			--localstatedir=/var --sysconfdir=/etc \
+			--localstatedir=/opt/ss/var --sysconfdir=/opt/ss/etc \
 			--with-perl-bindings="INSTALLDIRS=vendor" \
 			--without-libstatgrab \
 			--without-included-ltdl \
@@ -219,9 +219,14 @@ install-arch: build-arch
 
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 
-	rm -f debian/tmp/usr/lib/collectd/*.la
-	rm -f debian/tmp/usr/lib/libcollectdclient.la
-	rm -f debian/tmp/etc/collectd.conf
+	rm -f debian/tmp/opt/ss/lib/collectd/*.la
+	rm -f debian/tmp/opt/ss/lib/libcollectdclient.la
+	rm -f debian/tmp/opt/ss/etc/collectd.conf
+	rm -f debian/tmp/opt/ss/share/man/man1/collectd-nagios.1
+	rm -f debian/tmp/opt/ss/lib/libcollectdclient.so*
+	rm -f debian/tmp/opt/ss/lib/pkgconfig/libcollectdclient.pc
+	rm -f debian/tmp/opt/ss/include/collectd/*.h
+	rm -f debian/tmp/opt/ss/bin/collectd-nagios
 
 	dh_install -a --sourcedir=$(CURDIR)/debian/tmp --fail-missing
 
@@ -270,17 +275,16 @@ binary-arch: build-arch install-arch
 	dh_installdebconf -a
 	dh_installinit -pcollectd-core --name=collectd -- defaults 95
 	dh_link -a
-	dh_strip -a --dbg-package=collectd-dbg
 	dh_compress -a -Xexamples/
 	dh_fixperms -a
 	dh_makeshlibs -a
 	dh_installdeb -a
 	dh_shlibdeps -a -Ncollectd-core -Ncollectd
 	dpkg-shlibdeps -Tdebian/collectd.substvars \
-		-dDepends debian/collectd-core/usr/lib/collectd/rrdtool.so
+		-dDepends debian/collectd-core/opt/ss/lib/collectd/rrdtool.so
 	dpkg-shlibdeps -Tdebian/collectd-core.substvars \
-		-dDepends debian/collectd-core/usr/sbin/* \
-		-dSuggests debian/collectd-core/usr/lib/collectd/*.so
+		-dDepends debian/collectd-core/opt/ss/sbin/* \
+		-dSuggests debian/collectd-core/opt/ss/lib/collectd/*.so
 	grep shlibs:Suggests debian/collectd-core.substvars \
 		| sed -e 's/shlibs:Suggests/shlibs:Recommends/' \
 		>> debian/collectd.substvars

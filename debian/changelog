@@ -1,3 +1,9 @@
+collectd (5.0.2-2ss4) oneiric; urgency=low
+
+  * Re-home everything under /opt/ss like we do for CentOS.
+
+ -- SwiftStack Inc. <contact@swiftstack.net>  Thu, 15 Nov 2012 12:21:19 -0800
+
 collectd (5.0.2-1ss7) oneiric; urgency=low
 
   * Depend on ss-python-statsd, not python-ss-statsd.

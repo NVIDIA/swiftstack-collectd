@@ -12,3 +12,5 @@ collectd-core: capitalization-error-in-description python Python
 # though ...
 collectd-core: binary-or-shlib-defines-rpath ./usr/lib/collectd/java.so /usr/lib/jvm/java-6-openjdk/jre/lib/*
 
+collectd-core: unstripped-binary-or-object
+collectd-core: dir-or-file-in-opt opt/ss/*
