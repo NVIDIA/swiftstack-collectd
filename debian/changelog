@@ -1,6 +1,7 @@
-collectd (5.0.2-2ss4) oneiric; urgency=low
+collectd (5.0.2-2ss6) oneiric; urgency=low
 
   * Re-home everything under /opt/ss like we do for CentOS.
+  * Config file will live at /opt/ss/etc/collectd.conf
 
  -- SwiftStack Inc. <contact@swiftstack.net>  Thu, 15 Nov 2012 12:21:19 -0800
 
