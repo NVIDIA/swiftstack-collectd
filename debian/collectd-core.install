@@ -1,8 +1,11 @@
-../collection.conf etc/collectd/
 opt/ss/lib/collectd/*.so
+opt/ss/bin/collectdctl
+opt/ss/bin/collectd-tg
 opt/ss/sbin
 opt/ss/share/collectd
 opt/ss/share/man/man1/collectdmon.1
+opt/ss/share/man/man1/collectd-tg.1
+opt/ss/share/man/man1/collectdctl.1
 opt/ss/share/man/man1/collectd.1
 opt/ss/share/man/man5/collectd-*.5
 opt/ss/share/man/man5/collectd.conf.5

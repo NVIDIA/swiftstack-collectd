@@ -49,7 +49,6 @@ confflags = --host=$(DEB_HOST_GNU_TYPE) \
             --disable-dbi     \
             --disable-dns     \
             --disable-email   \
-            --disable-entropy \
             --disable-gmond   \
             --disable-java    \
             --disable-libvirt \
@@ -290,11 +289,7 @@ binary-arch: build install-arch
 		debian/collectd.conf debian/filters.conf debian/thresholds.conf
 	# some upstream tarballs have been built inside a dirty working dir
 	( cd debian/collectd-core/ \
-		&& cd usr/share/doc/collectd-core/examples/collection3/ \
-		&& rm -f bin/foo bin/test_config.px etc/collection4.conf \
-		&& rm -f lib/Collectd/Graph.pm lib/Collectd/Graph/Data.pm \
-		&& rm -f lib/Collectd/Graph/File.pm lib/Collectd/Graph/Filter.pm \
-		&& rm -f lib/Collectd/Graph/MetaData.pm )
+		&& rm -rf usr )
 	dh_installdebconf -a
 	dh_installinit -pcollectd-core --name=collectd -- defaults 95
 	dh_link -a
