@@ -1,3 +1,9 @@
+collectd (5.2.1-2) precise; urgency=low
+
+  * Fix build for precise (iptables.so not finding libip{,4,6}tc)
+
+ -- SwiftStack Inc. <contact@swiftstack.net>  Sat, 02 Mar 2013 13:56:38 -0800
+
 collectd (5.2.1-1) experimental; urgency=low
 
   * New upstream release.
