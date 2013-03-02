@@ -25,33 +25,16 @@ CFLAGS += -Wall
 # symbols). This is a workaround for this issue.
 CPPFLAGS += -DLT_LAZY_OR_NOW='RTLD_LAZY|RTLD_GLOBAL'
 
-# Upstream defaults to ${sysconfdir}/collectd.conf. Setting ${sysconfdir} to
-# /etc/collectd would be wrong though.
-CPPFLAGS += -UCONFIGFILE
-CPPFLAGS += -DCONFIGFILE='\"/etc/collectd/collectd.conf\"'
-
 LDFLAGS = $(shell dpkg-buildflags --get LDFLAGS)
-
-# The archdir map has been copied from openjdk-6's debian/rules.
-JAVA_ARCHDIR = $(shell /usr/share/javahelper/java-arch.sh $(DEB_BUILD_ARCH))
-ifeq (,$(JAVA_ARCHDIR))
-	JAVA_ARCHDIR = $(DEB_BUILD_ARCH)
-endif
-JAVA_HOME = /usr/lib/jvm/java-6-openjdk-$(DEB_BUILD_ARCH)
-JAVA_LIBDIR = $(JAVA_HOME)/jre/lib/$(JAVA_ARCHDIR)/server
-
-JAVAC = $(JAVA_HOME)/bin/javac
-JAR = $(JAVA_HOME)/bin/jar
-JAVA_CPPFLAGS = -I$(JAVA_HOME)/include
-JAVA_LDFLAGS = -L$(JAVA_LIBDIR) -Wl,-rpath -Wl,$(JAVA_LIBDIR)
 
 include /usr/share/dpatch/dpatch.make
 
 confflags = --host=$(DEB_HOST_GNU_TYPE) \
-			--build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr \
+			--build=$(DEB_BUILD_GNU_TYPE) --prefix=/opt/ss \
 			--mandir=\$${prefix}/share/man \
-			--localstatedir=/var --sysconfdir=/etc \
-			--with-perl-bindings="INSTALLDIRS=vendor" \
+			--localstatedir=/opt/ss/var --sysconfdir=/opt/ss/etc \
+			--with-libiptc=yes \
+			--without-perl-bindings \
 			--without-libstatgrab \
 			--without-included-ltdl \
 			--disable-static \
@@ -62,9 +45,7 @@ confflags = --host=$(DEB_HOST_GNU_TYPE) \
             --disable-ascent \
             --disable-battery \
             --disable-bind \
-            --disable-curl \
-            --disable-curl_json \
-            --disable-curl_xml \
+            --disable-curl-json \
             --disable-dbi     \
             --disable-dns     \
             --disable-email   \
@@ -196,6 +177,9 @@ ifneq (,$(filter hppa, $(DEB_BUILD_ARCH)))
 	confflags += --disable-java
 endif
 
+configure: build.sh configure.in
+	./build.sh
+
 config.status: configure $(DPATCH_STAMPFN)
 	dh_testdir
 	
@@ -213,8 +197,6 @@ config.status: configure $(DPATCH_STAMPFN)
 	
 	PKG_CONFIG_PATH="$(CURDIR)/debian/pkgconfig:$$PKG_CONFIG_PATH" \
 	./configure $(confflags) CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" \
-		JAVAC="$(JAVAC)" JAR="$(JAR)" JAVA_CPPFLAGS="$(JAVA_CPPFLAGS)" \
-		JAVA_LDFLAGS="$(JAVA_LDFLAGS)" \
 		|| ( status=$$?; cat config.log; exit $$status )
 
 build: build-arch build-indep
@@ -223,7 +205,7 @@ build-indep: build-stamp
 
 build-stamp: config.status
 	dh_testdir
-	
+
 	$(MAKE)
 	perl ./debian/bin/check_plugins.pl
 	
@@ -259,18 +241,15 @@ install-arch: build
 	
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 	
-	rm -f debian/tmp/usr/lib/collectd/*.la
-	rm -f debian/tmp/usr/lib/libcollectdclient.la
-	rm -f debian/tmp/etc/collectd.conf
-	
-	# this was broken by passing INSTALL_BASE rather than PREFIX to
-	# Makefile.PL
-	install -d -m 755 debian/tmp/usr/share/man/man3
-	mv debian/tmp/usr/man/man3/Collectd::Unixsock.3pm \
-		debian/tmp/usr/share/man/man3/
-	install -d -m 755 debian/tmp/usr/share/
-	mv debian/tmp/usr/lib/perl5 debian/tmp/usr/share/
-	
+	rm -f debian/tmp/opt/ss/lib/collectd/*.la
+	rm -f debian/tmp/opt/ss/lib/libcollectdclient.la
+	rm -f debian/tmp/opt/ss/etc/collectd.conf
+	rm -f debian/tmp/opt/ss/share/man/man1/collectd-nagios.1
+	rm -f debian/tmp/opt/ss/lib/libcollectdclient.so*
+	rm -f debian/tmp/opt/ss/lib/pkgconfig/libcollectdclient.pc
+	rm -f debian/tmp/opt/ss/include/collectd/*.h
+	rm -f debian/tmp/opt/ss/bin/collectd-nagios
+
 	dh_install -a --sourcedir=$(CURDIR)/debian/tmp --fail-missing
 	
 	perl ./debian/bin/gen_plugin_deps.pl
@@ -319,17 +298,16 @@ binary-arch: build install-arch
 	dh_installdebconf -a
 	dh_installinit -pcollectd-core --name=collectd -- defaults 95
 	dh_link -a
-	dh_strip -a --dbg-package=collectd-dbg
 	dh_compress -a -Xexamples/
 	dh_fixperms -a
 	dh_makeshlibs -a
 	dh_installdeb -a
 	dh_shlibdeps -a -Ncollectd-core -Ncollectd
 	dpkg-shlibdeps -Tdebian/collectd.substvars \
-		-dDepends debian/collectd-core/usr/lib/collectd/rrdtool.so
+		-dDepends debian/collectd-core/opt/ss/lib/collectd/rrdtool.so
 	dpkg-shlibdeps -Tdebian/collectd-core.substvars \
-		-dDepends debian/collectd-core/usr/sbin/* \
-		-dSuggests debian/collectd-core/usr/lib/collectd/*.so
+		-dDepends debian/collectd-core/opt/ss/sbin/* \
+		-dSuggests debian/collectd-core/opt/ss/lib/collectd/*.so
 	grep shlibs:Suggests debian/collectd-core.substvars \
 		| sed -e 's/shlibs:Suggests/shlibs:Recommends/' \
 		>> debian/collectd.substvars

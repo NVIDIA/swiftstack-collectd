@@ -3,9 +3,11 @@ Section: utils
 Priority: optional
 Maintainer: Sebastian Harl <tokkee@debian.org>
 Build-Depends: debhelper (>= 5), dpkg-dev (>= 1.14.10), po-debconf, dpatch,
- bison, flex, autotools-dev, libltdl-dev, pkg-config,
+ bison, flex, autotools-dev, libltdl-dev, pkg-config, automake, libtool,
  iproute-dev [!alpha !amd64 !hppa !ia64 !ppc64 !mips !mipsel !kfreebsd-any !hurd-any],
  iptables-dev (>= 1.4.3.2-2) [linux-any],
+ autoconf, make (>= 3.81), devscripts, libevent-dev, libnl-dev,
+ libcurl3-dev,
  libgcrypt11-dev,
  libglib2.0-dev,
  libhal-dev,
@@ -28,7 +30,7 @@ Vcs-Browser: http://git.tokkee.org/?p=pkg-collectd.git
 
 Package: collectd-core
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ss-python-statsd, liboping0
 Suggests: collectd-dev,
 # services providing data that may be collected by collectd
  hddtemp, iptables, ipvsadm, lm-sensors, mbmon,
@@ -140,98 +142,4 @@ Description: statistics collection and monitoring daemon (core system)
    * system resources used by Linux-VServers: vserver
    * wireless network stats: wireless
    * send collected values to a web-server: write_http
-
-Package: collectd
-Architecture: any
-Depends: collectd-core, ${shlibs:Depends}, ${misc:Depends}
-Recommends: ${shlibs:Recommends}
-Description: statistics collection and monitoring daemon
- collectd is a small daemon which collects system information periodically and
- provides mechanisms to monitor and store the values in a variety of ways.
- Since the daemon doesn't need to startup every time it wants to update the
- values it's very fast and easy on the system. Also, the statistics are very
- fine grained since the files are updated every 10 seconds by default.
- .
- The collected information can be used to find current performance bottlenecks
- (performance analysis) and predict future system load (capacity planning).
- .
- This package provides a full installation of the daemon, including the
- configuration. For the core system, see the "collectd-core" package, which
- allows sites to, e.g., provide customizations (like a custom default
- configuration) on top of it without having to modify the "collectd" package.
-
-Package: collectd-utils
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: collectd
-Suggests: nagios3 | nagios2
-Replaces: collectd (<< 4.6.1-1~)
-Description: statistics collection and monitoring daemon (utilities)
- collectd is a small daemon which collects system information periodically and
- provides mechanisms to monitor and store the values in a variety of ways.
- Since the daemon doesn't need to startup every time it wants to update the
- values it's very fast and easy on the system. Also, the statistics are very
- fine grained since the files are updated every 10 seconds by default.
- .
- This package contains the following utility:
- .
-   * collectdctl: Control interface for collectd
-   * collectd-nagios: Nagios plugin for querying collectd
-
-Package: collectd-dbg
-Section: debug
-Architecture: any
-Priority: extra
-Depends: collectd-core (= ${binary:Version}), ${misc:Depends}
-Recommends: collectd-utils (= ${binary:Version}),
- libcollectdclient1 (= ${binary:Version})
-Description: statistics collection and monitoring daemon (debugging symbols)
- collectd is a small daemon which collects system information periodically and
- provides mechanisms to monitor and store the values in a variety of ways.
- Since the daemon doesn't need to startup every time it wants to update the
- values it's very fast and easy on the system. Also, the statistics are very
- fine grained since the files are updated every 10 seconds by default.
- .
- This package contains the debugging symbols.
-
-Package: collectd-dev
-Architecture: all
-Depends: collectd-core (>= ${source:Version}), collectd-core (<< 5.3~),
- ${misc:Depends}
-Description: statistics collection and monitoring daemon (development files)
- collectd is a small daemon which collects system information periodically and
- provides mechanisms to monitor and store the values in a variety of ways.
- Since the daemon doesn't need to startup every time it wants to update the
- values it's very fast and easy on the system. Also, the statistics are very
- fine grained since the files are updated every 10 seconds by default.
- .
- This package contains the development files needed to create your own
- plugins.
-
-Package: libcollectdclient-dev
-Section: libdevel
-Architecture: any
-Depends: libcollectdclient1 (= ${binary:Version}), ${misc:Depends}
-Description: client library for collectd's control interface (development files)
- libcollectdclient provides an API to access the control interface provided by
- the unixsock plugin of collectd, a statistics collection and monitoring
- daemon. It can be used to access values collected by collectd or dispatch new
- values and notifications to the daemon. This allows for integration with
- other applications such as monitoring solutions.
- .
- This package contains the header files and the static library.
-
-Package: libcollectdclient1
-Section: libs
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: collectd
-Description: client library for collectd's control interface
- libcollectdclient provides an API to access the control interface provided by
- the unixsock plugin of collectd, a statistics collection and monitoring
- daemon. It can be used to access values collected by collectd or dispatch new
- values and notifications to the daemon. This allows for integration with
- other applications such as monitoring solutions.
- .
- This package contains the shared library.
 
