@@ -1,0 +1,21 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 03_fix_memcached_buffer_len.dpatch by  <vagrant@ocelot>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix memcached plugin read buffer length
+
+@DPATCH@
+
+diff --git a/src/memcached.c b/src/memcached.c
+index ee3dbe1..44cb439 100644
+--- a/src/memcached.c
++++ b/src/memcached.c
+@@ -357,7 +357,7 @@ static void submit_gauge2 (const char *type, const char *type_inst,
+ 
+ static int memcached_read (void) /* {{{ */
+ {
+-	char buf[1024];
++	char buf[2048];
+ 	char *fields[3];
+ 	char *ptr;
+ 	char *line;
