@@ -2,7 +2,6 @@
 # debian/rules for collectd
 #
 # Written by Sebastian Harl <tokkee@debian.org>.
-# Written by Jens Braeuer <braeuer.jens@googlemail.com>.
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -13,8 +12,12 @@ DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_ARCH      ?= $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
-CPPFLAGS = -I$(CURDIR)/debian/include
-CFLAGS = -Wall -g
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all
+
+CPPFLAGS = $(shell dpkg-buildflags --get CPPFLAGS)
+CPPFLAGS += -I$(CURDIR)/debian/include
+CFLAGS = $(shell dpkg-buildflags --get CFLAGS)
+CFLAGS += -Wall
 
 # There is no way to tell lt_dlopen() to use the RTLD_GLOBAL flag which is
 # however required by the perl plugin (which would otherwise be unable to find
@@ -22,20 +25,19 @@ CFLAGS = -Wall -g
 # symbols). This is a workaround for this issue.
 CPPFLAGS += -DLT_LAZY_OR_NOW='RTLD_LAZY|RTLD_GLOBAL'
 
-ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0
-else
-	CFLAGS += -O2
-endif
+# Upstream defaults to ${sysconfdir}/collectd.conf. Setting ${sysconfdir} to
+# /etc/collectd would be wrong though.
+CPPFLAGS += -UCONFIGFILE
+CPPFLAGS += -DCONFIGFILE='\"/etc/collectd/collectd.conf\"'
+
+LDFLAGS = $(shell dpkg-buildflags --get LDFLAGS)
 
 # The archdir map has been copied from openjdk-6's debian/rules.
-JAVA_ARCHDIR_MAP = armel=arm hppa=parisc lpia=i386 powerpc=ppc powerpcspe=ppc sh4=sh
-JAVA_ARCHDIR = $(strip $(patsubst $(DEB_BUILD_ARCH)=%, %, \
-			$(filter $(DEB_BUILD_ARCH)=%, $(JAVA_ARCHDIR_MAP))))
+JAVA_ARCHDIR = $(shell /usr/share/javahelper/java-arch.sh $(DEB_BUILD_ARCH))
 ifeq (,$(JAVA_ARCHDIR))
 	JAVA_ARCHDIR = $(DEB_BUILD_ARCH)
 endif
-JAVA_HOME = /usr/lib/jvm/java-6-openjdk
+JAVA_HOME = /usr/lib/jvm/java-6-openjdk-$(DEB_BUILD_ARCH)
 JAVA_LIBDIR = $(JAVA_HOME)/jre/lib/$(JAVA_ARCHDIR)/server
 
 JAVAC = $(JAVA_HOME)/bin/javac
@@ -46,25 +48,65 @@ JAVA_LDFLAGS = -L$(JAVA_LIBDIR) -Wl,-rpath -Wl,$(JAVA_LIBDIR)
 include /usr/share/dpatch/dpatch.make
 
 confflags = --host=$(DEB_HOST_GNU_TYPE) \
-			--build=$(DEB_BUILD_GNU_TYPE) --prefix=/opt/ss \
+			--build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr \
 			--mandir=\$${prefix}/share/man \
-			--localstatedir=/opt/ss/var --sysconfdir=/opt/ss/etc \
+			--localstatedir=/var --sysconfdir=/etc \
 			--with-perl-bindings="INSTALLDIRS=vendor" \
 			--without-libstatgrab \
 			--without-included-ltdl \
-			--enable-all-plugins \
 			--disable-static \
-			--disable-amqp \
-			--disable-lpar \
-			--disable-redis \
-			--disable-varnish \
-			--disable-write_redis
+			--enable-all-plugins \
+            --disable-amqp \
+            --disable-apache \
+            --disable-apcups \
+            --disable-ascent \
+            --disable-battery \
+            --disable-bind \
+            --disable-curl \
+            --disable-curl_json \
+            --disable-curl_xml \
+            --disable-dbi     \
+            --disable-dns     \
+            --disable-email   \
+            --disable-entropy \
+            --disable-gmond   \
+            --disable-java    \
+            --disable-libvirt \
+            --disable-madwifi   \
+            --disable-mbmon    \
+            --disable-memcachec \
+            --disable-modbus   \
+            --disable-multimeter \
+            --disable-mysql    \
+            --disable-nfs     \
+            --disable-notify_desktop \
+            --disable-notify_email   \
+            --disable-numa           \
+            --disable-nut            \
+            --disable-olsrd          \
+            --disable-perl           \
+            --disable-pinba          \
+            --disable-postgresql \
+            --disable-powerdns       \
+            --disable-rrdcached      \
+            --disable-rrdtool        \
+            --disable-serial         \
+            --disable-snmp           \
+            --disable-teamspeak2  \
+            --disable-ted         \
+            --disable-tokyotyrant \
+            --disable-varnish     \
+            --disable-wireless    \
+            --disable-write_redis \
+            --disable-zfs_arc
 
 # These plugins do not provide any functionality under Linux.
-confflags += --disable-apple_sensors --disable-tape
-
-# libmodbus is required for the modbus plugin.
-confflags += --disable-modbus
+# MacOS only (requires IO Kit):
+confflags += --disable-apple_sensors
+# AIX only (requires perfstat):
+confflags += --disable-lpar
+# Solaris only (requires devinfo and kstat)
+confflags += --disable-tape
 
 # libnetapp is required for the netapp plugin.
 confflags += --disable-netapp
@@ -75,8 +117,14 @@ confflags += --disable-onewire
 # libclntsh is required for the oracle plugin.
 confflags += --disable-oracle
 
+# libcredis is required for the *redis plugins.
+confflags += --disable-redis --disable-write_redis
+
 # librouteros is required for the routeros plugin.
 confflags += --disable-routeros
+
+# libmongoc is required for the write_mongodb plugin.
+confflags += --disable-write_mongodb
 
 # xmms1 is required for the xmms plugin.
 confflags += --disable-xmms
@@ -93,16 +141,29 @@ endif
 # These plugins are Linux-specific.
 ifneq (,$(filter kfreebsd-i386 kfreebsd-amd64, $(DEB_BUILD_ARCH)))
 	confflags += \
+		--disable-ethstat \
 		--disable-iptables \
 		--disable-ipvs \
 		--disable-madwifi \
+		--disable-md \
 		--disable-netlink \
+		--disable-numa \
 		--disable-sensors \
 		--disable-vserver
 endif
 
+# This plugin is FreeBSD-specific.
+ifeq (,$(filter kfreebsd-i386 kfreebsd-amd64, $(DEB_BUILD_ARCH)))
+	confflags += \
+		--disable-pf
+endif
+
 # These plugins have not been ported to FreeBSD yet.
 ifneq (,$(filter kfreebsd-i386 kfreebsd-amd64, $(DEB_BUILD_ARCH)))
+	# Work-around an incomplete check for kvm functionality
+	CPPFLAGS  += -DHAVE_STRUCT_KINFO_PROC_FREEBSD
+	confflags += --enable-processes=force
+
 	confflags += \
 		--disable-battery \
 		--disable-conntrack \
@@ -135,98 +196,85 @@ ifneq (,$(filter hppa, $(DEB_BUILD_ARCH)))
 	confflags += --disable-java
 endif
 
-build.sh:
-	cp debian/build.sh .
-	chmod a+x build.sh
-
-configure: build.sh configure.in
-	./build.sh
-
 config.status: configure $(DPATCH_STAMPFN)
 	dh_testdir
-
+	
 	( cd debian/patches/; for patch in *; do \
 		if test "$$patch" != "00list"; then \
 			grep "$$patch" 00list > /dev/null \
 				|| ( echo "$$patch not enabled\!"; exit 1 ); \
 		fi; done )
-
-  # This is a work-around for #474087 (broken openipmi .pc files).
+	
+	# This is a work-around for #474087 (broken openipmi .pc files).
 	mkdir debian/pkgconfig
 	sed -re 's/^(Requires:.*) pthread(.*)$$/\1\2/' \
 		/usr/lib/pkgconfig/OpenIPMIpthread.pc \
 		> debian/pkgconfig/OpenIPMIpthread.pc
-
+	
 	PKG_CONFIG_PATH="$(CURDIR)/debian/pkgconfig:$$PKG_CONFIG_PATH" \
-	./configure $(confflags) CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" \
+	./configure $(confflags) CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" \
 		JAVAC="$(JAVAC)" JAR="$(JAR)" JAVA_CPPFLAGS="$(JAVA_CPPFLAGS)" \
 		JAVA_LDFLAGS="$(JAVA_LDFLAGS)" \
-                --with-libiptc=/ \
-                --disable-ascent --disable-curl_json --disable-curl_xml \
-                --disable-dbi --disable-gmond --disable-java --disable-libvirt \
-                --disable-mysql --disable-notify_desktop --disable-notify_email \
-                --disable-perl --disable-pinba --disable-rrdcached \
-                --disable-rrdtool --disable-snmp --disable-tokyotyrant \
-                --disable-bind \
 		|| ( status=$$?; cat config.log; exit $$status )
 
-build-indep:
-
-build-arch: build-stamp
-
 build: build-arch build-indep
+build-arch: build-stamp
+build-indep: build-stamp
 
 build-stamp: config.status
 	dh_testdir
-
-	$(MAKE) iptables_la_LIBADD="-liptc -lip4tc -lip6tc"
+	
+	$(MAKE)
 	perl ./debian/bin/check_plugins.pl
-
+	
 	touch build-stamp
 
 clean: unpatch
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
-
+	
 	[ ! -f Makefile ] || $(MAKE) distclean
-
+	
 	rm -f debian/README.Debian.plugins
 	rm -f src/*.1 src/*.5
-
+	
 	rm -rf debian/pkgconfig
-
+	
 	dh_clean
 	debconf-updatepo
 
 install-indep:
 	dh_testdir
 	dh_testroot
-	dh_prep
+	dh_clean -k
 	dh_installdirs -i
 	dh_install -i
 
-install-arch: build-arch
+install-arch: build
 	dh_testdir
 	dh_testroot
-	dh_prep
+	dh_clean -k
 	dh_installdirs -a
-
+	
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
-
-	rm -f debian/tmp/opt/ss/lib/collectd/*.la
-	rm -f debian/tmp/opt/ss/lib/libcollectdclient.la
-	rm -f debian/tmp/opt/ss/etc/collectd.conf
-	rm -f debian/tmp/opt/ss/share/man/man1/collectd-nagios.1
-	rm -f debian/tmp/opt/ss/lib/libcollectdclient.so*
-	rm -f debian/tmp/opt/ss/lib/pkgconfig/libcollectdclient.pc
-	rm -f debian/tmp/opt/ss/include/collectd/*.h
-	rm -f debian/tmp/opt/ss/bin/collectd-nagios
-
+	
+	rm -f debian/tmp/usr/lib/collectd/*.la
+	rm -f debian/tmp/usr/lib/libcollectdclient.la
+	rm -f debian/tmp/etc/collectd.conf
+	
+	# this was broken by passing INSTALL_BASE rather than PREFIX to
+	# Makefile.PL
+	install -d -m 755 debian/tmp/usr/share/man/man3
+	mv debian/tmp/usr/man/man3/Collectd::Unixsock.3pm \
+		debian/tmp/usr/share/man/man3/
+	install -d -m 755 debian/tmp/usr/share/
+	mv debian/tmp/usr/lib/perl5 debian/tmp/usr/share/
+	
 	dh_install -a --sourcedir=$(CURDIR)/debian/tmp --fail-missing
-
+	
 	perl ./debian/bin/gen_plugin_deps.pl
-
+	
 	mkdir -p debian/collectd-core/usr/share/lintian/overrides/
 	cp debian/collectd-core.overrides \
 		debian/collectd-core/usr/share/lintian/overrides/collectd-core
@@ -245,7 +293,7 @@ binary-indep: install-indep
 	dh_md5sums -i
 	dh_builddeb -i
 
-binary-arch: build-arch install-arch
+binary-arch: build install-arch
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs -a ChangeLog
@@ -254,11 +302,12 @@ binary-arch: build-arch install-arch
 	dh_installexamples -a contrib/collectd2html.pl contrib/collection.cgi \
 		contrib/collection3/ contrib/php-collection/ \
 		contrib/exec-munin.conf contrib/exec-munin.px contrib/exec-smartctl \
-		contrib/exec-nagios.conf contrib/exec-nagios.px \
+		contrib/exec-nagios.conf contrib/exec-nagios.px contrib/exec-ksm.sh \
 		contrib/SpamAssassin/ contrib/iptables/ contrib/cussh.pl \
 		contrib/snmp-data.conf contrib/add_rra.sh contrib/network-proxy.py \
 		contrib/collectd_network.py contrib/collectd_unixsock.py \
 		contrib/snmp-probe-host.px contrib/GenericJMX.conf \
+		contrib/postgresql \
 		debian/collectd.conf debian/filters.conf debian/thresholds.conf
 	# some upstream tarballs have been built inside a dirty working dir
 	( cd debian/collectd-core/ \
@@ -270,16 +319,17 @@ binary-arch: build-arch install-arch
 	dh_installdebconf -a
 	dh_installinit -pcollectd-core --name=collectd -- defaults 95
 	dh_link -a
+	dh_strip -a --dbg-package=collectd-dbg
 	dh_compress -a -Xexamples/
 	dh_fixperms -a
 	dh_makeshlibs -a
 	dh_installdeb -a
 	dh_shlibdeps -a -Ncollectd-core -Ncollectd
 	dpkg-shlibdeps -Tdebian/collectd.substvars \
-		-dDepends debian/collectd-core/opt/ss/lib/collectd/rrdtool.so
+		-dDepends debian/collectd-core/usr/lib/collectd/rrdtool.so
 	dpkg-shlibdeps -Tdebian/collectd-core.substvars \
-		-dDepends debian/collectd-core/opt/ss/sbin/* \
-		-dSuggests debian/collectd-core/opt/ss/lib/collectd/*.so
+		-dDepends debian/collectd-core/usr/sbin/* \
+		-dSuggests debian/collectd-core/usr/lib/collectd/*.so
 	grep shlibs:Suggests debian/collectd-core.substvars \
 		| sed -e 's/shlibs:Suggests/shlibs:Recommends/' \
 		>> debian/collectd.substvars
@@ -288,5 +338,5 @@ binary-arch: build-arch install-arch
 	dh_builddeb -a
 
 binary: binary-arch binary-indep
-.PHONY: build-arch build-indep clean binary-indep binary-arch binary install-indep install-arch
+.PHONY: build build-arch build-indep clean binary-indep binary-arch binary install-indep install-arch
 

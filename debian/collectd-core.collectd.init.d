@@ -11,16 +11,20 @@
 # Provides:          collectd
 # Required-Start:    $local_fs $remote_fs
 # Required-Stop:     $local_fs $remote_fs
-# Should-Start:      $network $named $syslog $time
+# Should-Start:      $network $named $syslog $time cpufrequtils
 # Should-Stop:       $network $named $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: start the statistics collection daemon
+# Short-Description: manage the statistics collection daemon
+# Description:       collectd is the statistics collection daemon.
+#                    It is a small daemon which collects system information
+#                    periodically and provides mechanisms to monitor and store
+#                    the values in a variety of ways.
 ### END INIT INFO
 
-set -e
+. /lib/lsb/init-functions
 
-PATH=/sbin:/bin:/usr/sbin:/usr/bin
+export PATH=/sbin:/bin:/usr/sbin:/usr/bin
 
 DISABLE=0
 
@@ -44,16 +48,6 @@ if [ -r /etc/default/$NAME ]; then
 	. /etc/default/$NAME
 fi
 
-if test "$DISABLE" != 0 -a "$1" == "start"; then
-	echo "$NAME has been disabled - see /etc/default/$NAME."
-	exit 0
-fi
-
-if test ! -e "$CONFIGFILE" -a "$1" == "start"; then
-	echo "Not starting $NAME - no configuration ($CONFIGFILE) found."
-	exit 0
-fi
-
 if test "$ENABLE_COREFILES" == 1; then
 	ulimit -c unlimited
 fi
@@ -64,37 +58,55 @@ else
 	_PIDFILE="$PIDFILE"
 fi
 
+# return:
+#   0 if config is fine
+#   1 if there is a syntax error
+#   2 if there is no configuration
 check_config() {
-	if ! $DAEMON -t -C "$CONFIGFILE"; then
-		if test -n "$1"; then
-			echo "$1" >&2
-		fi
-		exit 1
+	if test ! -e "$CONFIGFILE"; then
+		return 2
 	fi
+	if ! $DAEMON -t -C "$CONFIGFILE"; then
+		return 1
+	fi
+	return 0
 }
 
+# return:
+#   0 if the daemon has been started
+#   1 if the daemon was already running
+#   2 if the daemon could not be started
+#   3 if the daemon was not supposed to be started
 d_start() {
 	if test "$DISABLE" != 0; then
 		# we get here during restart
-		echo -n " - disabled by /etc/default/$NAME"
-		return 0
+		log_progress_msg "disabled by /etc/default/$NAME"
+		return 3
 	fi
 
 	if test ! -e "$CONFIGFILE"; then
 		# we get here during restart
-		echo -n " - no configuration ($CONFIGFILE) found."
-		return 0
+		log_progress_msg "disabled, no configuration ($CONFIGFILE) found"
+		return 3
 	fi
 
 	check_config
+	rc="$?"
+	if test "$rc" -ne 0; then
+		log_progress_msg "not starting, configuration error"
+		return 2
+	fi
 
 	if test "$USE_COLLECTDMON" == 1; then
 		start-stop-daemon --start --quiet --oknodo --pidfile "$_PIDFILE" \
-			--exec $COLLECTDMON_DAEMON -- -P "$_PIDFILE" -- -C "$CONFIGFILE"
+			--exec $COLLECTDMON_DAEMON -- -P "$_PIDFILE" -- -C "$CONFIGFILE" \
+			|| return 2
 	else
 		start-stop-daemon --start --quiet --oknodo --pidfile "$_PIDFILE" \
-			--exec $DAEMON -- -C "$CONFIGFILE" -P "$_PIDFILE"
+			--exec $DAEMON -- -C "$CONFIGFILE" -P "$_PIDFILE" \
+			|| return 2
 	fi
+	return 0
 }
 
 still_running_warning="
@@ -102,10 +114,19 @@ WARNING: $NAME might still be running.
 In large setups it might take some time to write all pending data to
 the disk. You can adjust the waiting time in /etc/default/collectd."
 
+# return:
+#   0 if the daemon has been stopped
+#   1 if the daemon was already stopped
+#   2 if daemon could not be stopped
 d_stop() {
 	PID=$( cat "$_PIDFILE" 2> /dev/null ) || true
 
 	start-stop-daemon --stop --quiet --oknodo --pidfile "$_PIDFILE"
+	rc="$?"
+
+	if test "$rc" -eq 2; then
+		return 2
+	fi
 
 	sleep 1
 	if test -n "$PID" && kill -0 $PID 2> /dev/null; then
@@ -115,64 +136,72 @@ d_stop() {
 			echo -n " ."
 
 			if test $i -gt $MAXWAIT; then
-				echo "$still_running_warning" >&2
-				return 1
+				log_progress_msg "$still_running_warning"
+				return 2
 			fi
 
 			sleep 2
 		done
-		return 0
+		return "$rc"
 	fi
-}
-
-d_status() {
-	PID=$( cat "$_PIDFILE" 2> /dev/null ) || true
-
-	if test -n "$PID" && kill -0 $PID 2> /dev/null; then
-		echo "collectd ($PID) is running."
-		exit 0
-	else
-		PID=$( pidof collectd ) || true
-
-		if test -n "$PID"; then
-			echo "collectd ($PID) is running."
-			exit 0
-		else
-			echo "collectd is stopped."
-		fi
-	fi
-	exit 1
+	return "$rc"
 }
 
 case "$1" in
 	start)
-		echo -n "Starting $DESC: $NAME"
+		log_daemon_msg "Starting $DESC" "$NAME"
 		d_start
-		echo "."
+		case "$?" in
+			0|1) log_end_msg 0 ;;
+			2) log_end_msg 1 ;;
+			3) log_end_msg 255; true ;;
+			*) log_end_msg 1 ;;
+		esac
 		;;
 	stop)
-		echo -n "Stopping $DESC: $NAME"
+		log_daemon_msg "Stopping $DESC" "$NAME"
 		d_stop
-		echo "."
+		case "$?" in
+			0|1) log_end_msg 0 ;;
+			2) log_end_msg 1 ;;
+		esac
 		;;
 	status)
-		d_status
+		status_of_proc -p "$_PIDFILE" "$DAEMON" "$NAME" && exit 0 || exit $?
 		;;
 	restart|force-reload)
-		echo -n "Restarting $DESC: $NAME"
-		check_config "Not restarting collectd."
+		log_daemon_msg "Restarting $DESC" "$NAME"
+		check_config
+		rc="$?"
+		if test "$rc" -eq 1; then
+			log_progress_msg "not restarting, configuration error"
+			log_end_msg 1
+			exit 1
+		fi
 		d_stop
-		sleep 1
-		d_start
-		echo "."
+		rc="$?"
+		case "$rc" in
+			0|1)
+				sleep 1
+				d_start
+				rc2="$?"
+				case "$rc2" in
+					0|1) log_end_msg 0 ;;
+					2) log_end_msg 1 ;;
+					3) log_end_msg 255; true ;;
+					*) log_end_msg 1 ;;
+				esac
+				;;
+			*)
+				log_end_msg 1
+				;;
+		esac
 		;;
 	*)
 		echo "Usage: $0 {start|stop|restart|force-reload|status}" >&2
-		exit 1
+		exit 3
 		;;
 esac
-
-exit 0
 
 # vim: syntax=sh noexpandtab sw=4 ts=4 :
 

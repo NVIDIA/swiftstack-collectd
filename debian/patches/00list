@@ -1,2 +1,4 @@
-02_processes_parsing.dpatch
-03_fix_memcached_buffer_len.dpatch
+rrd_filter_path.dpatch
+collection_conf_path.dpatch
+myplugin_includes.dpatch
+bts559801_plugin_find_fix.dpatch

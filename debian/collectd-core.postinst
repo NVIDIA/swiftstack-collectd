@@ -21,24 +21,34 @@ set -e
 
 case "$1" in
     configure)
-        # One-time migration to change existing /etc/init/collectd.conf path
-        # to /opt/ss/sbin/collectd
-        INITFILE=/etc/init/collectd.conf
-        OLDPATH=/usr/sbin/collectd
-        NEWPATH=/opt/ss/sbin/collectd
-        test -f $INITFILE && grep -q $OLDPATH $INITFILE && \
-            perl -pi -e "s,$OLDPATH,$NEWPATH," $INITFILE
+        db_get collectd/auto-migrate-3-4
+        if [ "$RET" = "true" ]; then
+            tmpdir=`mktemp -dt collectd.XXXXXXXXXX`
+            hostname=`hostname`
 
-        # Migrate collectd.conf location, if necessary
-        OLDPATH=/etc/collectd/collectd.conf
-        NEWPATH=/opt/ss/etc/collectd.conf
-        test -f $OLDPATH && mkdir -p `dirname $NEWPATH` && \
-            mv $OLDPATH $NEWPATH
+            if [ -z "$hostname" ]; then hostname="localhost"; fi
 
-        # SwiftStack uses upstart to manage collectd; restart it on upgrade
-        # (we do stop/start to allow Upstart to read the above path change on upgrade)
-        stop collectd ||: >/dev/null 2>&1
-        start collectd ||: >/dev/null 2>&1
+            cp -a /var/lib/collectd/ /var/backups/collectd-"$2"
+            /usr/lib/collectd/utils/migrate-3-4.px \
+                --hostname="$hostname" --outdir="$tmpdir" | bash
+
+            rm -rf /var/lib/collectd/
+            mkdir /var/lib/collectd/
+            mv $tmpdir /var/lib/collectd/rrd
+            chmod 0755 /var/lib/collectd/rrd
+
+            # this is only available on Solaris using libkstat
+            rm -f /var/lib/collectd/rrd/$hostname/swap/swap-reserved.rrd
+        fi
+
+        db_get collectd/auto-migrate-4-5
+        if [ "$RET" = "true" ]; then
+            cp -a /var/lib/collectd/ /var/backups/collectd-"$2"
+            /usr/lib/collectd/utils/migrate-4-5.px \
+                --rrdfilter /usr/lib/collectd/utils/rrd_filter.px \
+                --rrdtool /usr/bin/rrdtool \
+                --indir /var/lib/collectd/rrd/ | bash
+        fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
@@ -58,4 +68,5 @@ db_stop
 #DEBHELPER#
 
 exit 0
+
 
