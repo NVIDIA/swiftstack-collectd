@@ -21,8 +21,29 @@ set -e
 
 case "$1" in
     configure)
+
+        # One-time migration to ensure CPU Aggregation is configured upon
+        # upgrade (so correct metrics start coming in without having to push a
+        # config to clusters).
+        CONF=/opt/ss/etc/collectd.conf
+        if test -f $CONF && ! grep -q 'Plugin "aggregation"' $CONF; then
+            cat >> $CONF <<EOAGGREGATION
+LoadPlugin aggregation
+<Plugin "aggregation">
+  <Aggregation>
+    Plugin "cpu"
+    Type "cpu"
+
+    GroupBy "TypeInstance"
+
+    CalculateAverage true
+  </Aggregation>
+</Plugin>
+EOAGGREGATION
+        fi
+
+
         # SwiftStack uses upstart to manage collectd; restart it on upgrade
-        # (we do stop/start to allow Upstart to read the above path change on upgrade)
         stop collectd ||: >/dev/null 2>&1
         start collectd ||: >/dev/null 2>&1
     ;;
