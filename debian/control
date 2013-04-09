@@ -30,7 +30,7 @@ Vcs-Browser: http://git.tokkee.org/?p=pkg-collectd.git
 
 Package: collectd-core
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ss-python-statsd, liboping0
+Depends: ${shlibs:Depends}, ${misc:Depends}, ss-python-statsd, liboping0, libpython2.7
 Suggests: collectd-dev,
 # services providing data that may be collected by collectd
  hddtemp, iptables, ipvsadm, lm-sensors, mbmon,

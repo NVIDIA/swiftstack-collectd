@@ -1,3 +1,9 @@
+collectd (5.2.1-4) precise; urgency=low
+
+  * Add dependency on libpython2.7
+
+ -- SwiftStack Inc. <contact@swiftstack.net>  Tue, 09 Apr 2013 13:18:01 -0700
+
 collectd (5.2.1-3) precise; urgency=low
 
   * Add a one-time migration upon upgrade to enable aggregated CPU metrics.
