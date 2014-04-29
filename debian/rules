@@ -17,7 +17,7 @@ export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 CPPFLAGS = $(shell dpkg-buildflags --get CPPFLAGS)
 CPPFLAGS += -I$(CURDIR)/debian/include
 CFLAGS = $(shell dpkg-buildflags --get CFLAGS)
-CFLAGS += -Wall
+CFLAGS += -Wall -Wno-error=deprecated-declarations
 
 # There is no way to tell lt_dlopen() to use the RTLD_GLOBAL flag which is
 # however required by the perl plugin (which would otherwise be unable to find
@@ -37,6 +37,7 @@ confflags = --host=$(DEB_HOST_GNU_TYPE) \
 			--without-perl-bindings \
 			--without-libstatgrab \
 			--without-included-ltdl \
+			--without-libhal \
 			--disable-static \
 			--enable-all-plugins \
             --disable-amqp \
@@ -181,6 +182,7 @@ configure: build.sh configure.in
 
 config.status: configure $(DPATCH_STAMPFN)
 	dh_testdir
+	dh_autotools-dev_updateconfig
 	
 	( cd debian/patches/; for patch in *; do \
 		if test "$$patch" != "00list"; then \
@@ -222,6 +224,7 @@ clean: unpatch
 	
 	rm -rf debian/pkgconfig
 	
+	dh_autotools-dev_restoreconfig
 	dh_clean
 	debconf-updatepo
 

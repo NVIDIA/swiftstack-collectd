@@ -1,3 +1,9 @@
+collectd (5.2.1-5) precise; urgency=low
+
+  * Fix up for building on Trusty
+
+ -- SwiftStack Inc. <contact@swiftstack.net>  Mon, 28 Apr 2013 13:18:01 -0700
+
 collectd (5.2.1-4) precise; urgency=low
 
   * Add dependency on libpython2.7
