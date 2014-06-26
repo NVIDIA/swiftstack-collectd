@@ -701,7 +701,9 @@ static int disk_read (void)
 
 		if (is_disk)
 		{
-			disk_count += 1;
+			if (ignorelist_match (ignorelist, disk_name) == 0)
+				disk_count += 1;
+
 			disk_submit (disk_name, "disk_merged",
 					read_merged, write_merged);
 			disk_submit (disk_name, "disk_io_millis",

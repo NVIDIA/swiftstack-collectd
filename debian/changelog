@@ -1,4 +1,4 @@
-collectd (5.2.1-9) precise; urgency=low
+collectd (5.2.1-10) precise; urgency=low
 
   * Add tracking of io_millis/io_millis_weighted and disk count to disk stats
 
