@@ -488,6 +488,8 @@ static int disk_read (void)
 	derive_t write_ops     = 0;
 	derive_t write_merged  = 0;
 	derive_t write_time    = 0;
+	derive_t io_millis     = 0;
+	derive_t io_millis_weighted = 0;
 	int is_disk = 0;
 
 	diskstats_t *ds, *pre_ds;
@@ -563,6 +565,8 @@ static int disk_read (void)
 				read_time    = atoll (fields[6 + fieldshift]);
 				write_merged = atoll (fields[8 + fieldshift]);
 				write_time   = atoll (fields[10+ fieldshift]);
+				io_millis    = atoll (fields[12+ fieldshift]);
+				io_millis_weighted = atoll (fields[13+ fieldshift]);
 			}
 		}
 		else
@@ -675,6 +679,8 @@ static int disk_read (void)
 		{
 			disk_submit (disk_name, "disk_merged",
 					read_merged, write_merged);
+			disk_submit (disk_name, "disk_io_millis",
+			        io_millis, io_millis_weighted);
 		} /* if (is_disk) */
 	} /* while (fgets (buffer, sizeof (buffer), fh) != NULL) */
 

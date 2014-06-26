@@ -1,3 +1,9 @@
+collectd (5.2.1-6) precise; urgency=low
+
+  * Add tracking of io_millis and io_millis_weighted to disk stats
+
+ -- SwiftStack Inc. <contact@swiftstack.net>  Wed, 25 Jun 2014 13:18:01 -0700
+
 collectd (5.2.1-5) precise; urgency=low
 
   * Fix up for building on Trusty
