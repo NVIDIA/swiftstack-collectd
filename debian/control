@@ -1,4 +1,4 @@
-Source: collectd
+Source: ss-collectd
 Section: utils
 Priority: optional
 Maintainer: Sebastian Harl <tokkee@debian.org>
@@ -27,15 +27,15 @@ Homepage: http://collectd.org/
 Vcs-Git: git://git.tokkee.org/pkg-collectd.git
 Vcs-Browser: http://git.tokkee.org/?p=pkg-collectd.git
 
-Package: collectd-core
+Package: ss-collectd
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ss-python-statsd, liboping0, libpython2.7
-Suggests: collectd-dev,
 # services providing data that may be collected by collectd
- hddtemp, iptables, ipvsadm, lm-sensors, mbmon,
+Suggests: hddtemp, iptables, ipvsadm, lm-sensors, mbmon,
  memcached, nginx, openvpn, time-daemon,
  ${shlibs:Suggests}
-Replaces: collectd (<< 4.8.2-1~)
+Replaces: collectd, collectd-core, collectd-dbg, collectd-dev, collectd-utils
+Conflicts: collectd, collectd-core, collectd-dbg, collectd-dev, collectd-utils
 Description: statistics collection and monitoring daemon (core system)
  collectd is a small daemon which collects system information periodically and
  provides mechanisms to monitor and store the values in a variety of ways.

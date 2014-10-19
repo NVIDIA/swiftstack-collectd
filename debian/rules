@@ -256,9 +256,9 @@ install-arch: build
 	
 	perl ./debian/bin/gen_plugin_deps.pl
 	
-	mkdir -p debian/collectd-core/usr/share/lintian/overrides/
-	cp debian/collectd-core.overrides \
-		debian/collectd-core/usr/share/lintian/overrides/collectd-core
+	mkdir -p debian/ss-collectd/usr/share/lintian/overrides/
+	cp debian/ss-collectd.overrides \
+		debian/ss-collectd/usr/share/lintian/overrides/ss-collectd
 
 binary-indep: install-indep
 	dh_testdir
@@ -291,22 +291,20 @@ binary-arch: build install-arch
 		contrib/postgresql \
 		debian/collectd.conf debian/filters.conf debian/thresholds.conf
 	# some upstream tarballs have been built inside a dirty working dir
-	( cd debian/collectd-core/ \
+	( cd debian/ss-collectd/ \
 		&& rm -rf usr )
 	dh_installdebconf -a
-	dh_installinit -pcollectd-core --name=collectd -- defaults 95
+	dh_installinit -pss-collectd --name=collectd -- defaults 95
 	dh_link -a
 	dh_compress -a -Xexamples/
 	dh_fixperms -a
 	dh_makeshlibs -a
 	dh_installdeb -a
-	dh_shlibdeps -a -Ncollectd-core -Ncollectd
-	dpkg-shlibdeps -Tdebian/collectd.substvars \
-		-dDepends debian/collectd-core/opt/ss/lib/collectd/rrdtool.so
-	dpkg-shlibdeps -Tdebian/collectd-core.substvars \
-		-dDepends debian/collectd-core/opt/ss/sbin/* \
-		-dSuggests debian/collectd-core/opt/ss/lib/collectd/*.so
-	grep shlibs:Suggests debian/collectd-core.substvars \
+	dh_shlibdeps -a -Nss-collectd -Ncollectd
+	dpkg-shlibdeps -Tdebian/ss-collectd.substvars \
+		-dDepends debian/ss-collectd/opt/ss/sbin/* \
+		-dSuggests debian/ss-collectd/opt/ss/lib/collectd/*.so
+	grep shlibs:Suggests debian/ss-collectd.substvars \
 		| sed -e 's/shlibs:Suggests/shlibs:Recommends/' \
 		>> debian/collectd.substvars
 	dh_gencontrol -a

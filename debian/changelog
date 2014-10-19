@@ -1,35 +1,12 @@
-collectd (5.2.1-10) precise; urgency=low
+ss-collectd (5.2.1-1) precise; urgency=low
 
+  * Renamed SwiftStack packaging from collectd to ss-collectd
   * Add tracking of io_millis/io_millis_weighted and disk count to disk stats
-
- -- SwiftStack Inc. <contact@swiftstack.net>  Wed, 25 Jun 2014 13:18:01 -0700
-
-collectd (5.2.1-5) precise; urgency=low
-
+  * Add tracking of io_millis/io_millis_weighted and disk count to disk stats
   * Fix up for building on Trusty
-
- -- SwiftStack Inc. <contact@swiftstack.net>  Mon, 28 Apr 2013 13:18:01 -0700
-
-collectd (5.2.1-4) precise; urgency=low
-
   * Add dependency on libpython2.7
-
- -- SwiftStack Inc. <contact@swiftstack.net>  Tue, 09 Apr 2013 13:18:01 -0700
-
-collectd (5.2.1-3) precise; urgency=low
-
   * Add a one-time migration upon upgrade to enable aggregated CPU metrics.
-
- -- SwiftStack Inc. <contact@swiftstack.net>  Sat, 02 Mar 2013 22:19:51 -0800
-
-collectd (5.2.1-2) precise; urgency=low
-
   * Fix build for precise (iptables.so not finding libip{,4,6}tc)
-
- -- SwiftStack Inc. <contact@swiftstack.net>  Sat, 02 Mar 2013 13:56:38 -0800
-
-collectd (5.2.1-1) experimental; urgency=low
-
   * New upstream release.
   * debian/patches:
     - Removed postgresql_writer_memleak.dpatch -- applied upstream.
@@ -40,7 +17,7 @@ collectd (5.2.1-1) experimental; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Wed, 30 Jan 2013 21:35:30 +0100
 
-collectd (5.2.0-2) experimental; urgency=low
+ss-collectd (5.2.0-2) experimental; urgency=low
 
   * debian/patches:
     - Added postgresql_writer_memleak.dpatch fixing a memory leak in the
@@ -48,7 +25,7 @@ collectd (5.2.0-2) experimental; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Thu, 29 Nov 2012 09:09:51 +0100
 
-collectd (5.2.0-1) experimental; urgency=low
+ss-collectd (5.2.0-1) experimental; urgency=low
 
   * New upstream release:
     - ping plugin: Don't abort if ping_send fails but report an error only;
@@ -105,7 +82,7 @@ collectd (5.2.0-1) experimental; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Tue, 20 Nov 2012 15:40:12 +0100
 
-collectd (5.1.0-3) unstable; urgency=low
+ss-collectd (5.1.0-3) unstable; urgency=low
 
   * debian/patches/migrate-4-5-df.dpatch, debian/collectd-core.postinst:
     - Added patch to fix the migration of 'df' values in migrate-4-5.px;
@@ -123,7 +100,7 @@ collectd (5.1.0-3) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Sun, 15 Jul 2012 11:17:10 +0200
 
-collectd (5.1.0-2) unstable; urgency=low
+ss-collectd (5.1.0-2) unstable; urgency=low
 
   * debian/collectd-core.postinst:
     - Don't create unused temp. directory.
@@ -162,7 +139,7 @@ collectd (5.1.0-2) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Sat, 30 Jun 2012 13:27:41 +0200
 
-collectd (5.1.0-1) unstable; urgency=low
+ss-collectd (5.1.0-1) unstable; urgency=low
 
   * New upstream release (Closes: #630968):
     - syslog plugin now supports logging notifications; thanks to Trent W.
@@ -216,7 +193,7 @@ collectd (5.1.0-1) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Wed, 13 Jun 2012 08:05:01 +0200
 
-collectd (4.10.7-2) unstable; urgency=low
+ss-collectd (4.10.7-2) unstable; urgency=low
 
   * debian/po:
     - Updated Czech debconf translation; thanks to Martin Šín
@@ -246,7 +223,7 @@ collectd (4.10.7-2) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Sun, 10 Jun 2012 13:49:32 +0200
 
-collectd (4.10.7-1) unstable; urgency=low
+ss-collectd (4.10.7-1) unstable; urgency=low
 
   * New upstream release.
     - Fixed an endless loop in case the datadir is a symlink pointing to a
@@ -304,7 +281,7 @@ collectd (4.10.7-1) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Thu, 17 May 2012 15:55:39 +0200
 
-collectd (4.10.4-1) unstable; urgency=low
+ss-collectd (4.10.4-1) unstable; urgency=low
 
   * New upstream release.
     - Added support for Yajl version 2; thanks to John Stamp for reporting
@@ -348,7 +325,7 @@ collectd (4.10.4-1) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Mon, 09 Jan 2012 16:10:58 +0100
 
-collectd (4.10.1-2.1) unstable; urgency=high
+ss-collectd (4.10.1-2.1) unstable; urgency=high
 
   * Non-maintainer upload by the security team
   * Fix DoS in RRD file creation (Closes: #605092)
@@ -357,7 +334,7 @@ collectd (4.10.1-2.1) unstable; urgency=high
 
  -- Steffen Joeris <white@debian.org>  Wed, 08 Dec 2010 17:45:50 +1100
 
-collectd (4.10.1-2) unstable; urgency=medium
+ss-collectd (4.10.1-2) unstable; urgency=medium
 
   * debian/rules:
     - Added support for ‘powerpcspe’ to the Java arch mapping; thanks to
@@ -376,7 +353,7 @@ collectd (4.10.1-2) unstable; urgency=medium
 
  -- Sebastian Harl <tokkee@debian.org>  Wed, 08 Sep 2010 22:50:54 +0200
 
-collectd (4.10.1-1) unstable; urgency=low
+ss-collectd (4.10.1-1) unstable; urgency=low
 
   * New upstream release.
   * debian/patches:
@@ -388,7 +365,7 @@ collectd (4.10.1-1) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Wed, 28 Jul 2010 18:45:31 +0200
 
-collectd (4.10.0-1) unstable; urgency=low
+ss-collectd (4.10.0-1) unstable; urgency=low
 
   * New upstream release:
     New plugins:
@@ -422,7 +399,7 @@ collectd (4.10.0-1) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Tue, 08 Jun 2010 00:42:56 +0200
 
-collectd (4.9.1-2) unstable; urgency=low
+ss-collectd (4.9.1-2) unstable; urgency=low
 
   * debian/rules:
     - Re-enabled non-kfreebsd plugins on i386 and amd64, which had been
@@ -434,7 +411,7 @@ collectd (4.9.1-2) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Thu, 28 Jan 2010 22:09:16 +0100
 
-collectd (4.9.1-1) unstable; urgency=low
+ss-collectd (4.9.1-1) unstable; urgency=low
 
   * New upstream release:
     New plugins:
@@ -498,7 +475,7 @@ collectd (4.9.1-1) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Tue, 26 Jan 2010 00:22:32 +0100
 
-collectd (4.8.2-1) unstable; urgency=medium
+ss-collectd (4.8.2-1) unstable; urgency=medium
 
   * New upstream release:
     - Now using libtool 2.
@@ -566,7 +543,7 @@ collectd (4.8.2-1) unstable; urgency=medium
 
  -- Sebastian Harl <tokkee@debian.org>  Sat, 26 Dec 2009 12:06:46 +0100
 
-collectd (4.8.1-2) unstable; urgency=low
+ss-collectd (4.8.1-2) unstable; urgency=low
 
   * debian/rules:
     - Disabled the "java" plugin on hppa for now to work around a backlog in
@@ -576,7 +553,7 @@ collectd (4.8.1-2) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Thu, 19 Nov 2009 10:55:33 +0100
 
-collectd (4.8.1-1) unstable; urgency=medium
+ss-collectd (4.8.1-1) unstable; urgency=medium
 
   * New upstream release:
     - Fixed a build issue with libiptc that caused a segfault in the iptables
@@ -620,7 +597,7 @@ collectd (4.8.1-1) unstable; urgency=medium
 
  -- Sebastian Harl <tokkee@debian.org>  Thu, 15 Oct 2009 20:54:46 +0200
 
-collectd (4.7.2-1) unstable; urgency=low
+ss-collectd (4.7.2-1) unstable; urgency=low
 
   * New upstream release (Closes: #541887).
     - collectd2html.pl now supports the creation of SVG images; thanks to Ivan
@@ -702,7 +679,7 @@ collectd (4.7.2-1) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Sat, 29 Aug 2009 12:42:15 +0200
 
-collectd (4.6.3-1) unstable; urgency=low
+ss-collectd (4.6.3-1) unstable; urgency=low
 
   * New upstream release.
   * debian/patches:
@@ -717,14 +694,14 @@ collectd (4.6.3-1) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Tue, 02 Jun 2009 22:03:10 +0200
 
-collectd (4.6.2-3) unstable; urgency=low
+ss-collectd (4.6.2-3) unstable; urgency=low
 
   * debian/patches:
     - Actually enabled rrdtool_uninitialized_fix.dpatch - d'oh!
 
  -- Sebastian Harl <tokkee@debian.org>  Fri, 29 May 2009 15:49:46 +0200
 
-collectd (4.6.2-2) unstable; urgency=low
+ss-collectd (4.6.2-2) unstable; urgency=low
 
   * debian/patches:
     - Added battery_acpi_complain.dpatch - upstream patch to fix excessive
@@ -753,7 +730,7 @@ collectd (4.6.2-2) unstable; urgency=low
 
  -- Sebastian Harl <tokkee@debian.org>  Fri, 29 May 2009 14:12:36 +0200
 
-collectd (4.6.2-1) unstable; urgency=low
+ss-collectd (4.6.2-1) unstable; urgency=low
 
   * New upstream release.
     - Fixed the use of struct in6_addr (Closes: #521748).
@@ -812,7 +789,7 @@ collectd (4.6.2-1) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Thu, 02 Apr 2009 16:38:57 +0200
 
-collectd (4.5.1-1) experimental; urgency=low
+ss-collectd (4.5.1-1) experimental; urgency=low
 
   * New upstream release.
     New plugins:
@@ -854,7 +831,7 @@ collectd (4.5.1-1) experimental; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Fri, 12 Dec 2008 10:09:48 +0100
 
-collectd (4.4.2-3) unstable; urgency=low
+ss-collectd (4.4.2-3) unstable; urgency=low
 
   * New debconf template translation:
     - nl.po, thanks to Eric Spreen (Closes: #502204).
@@ -869,7 +846,7 @@ collectd (4.4.2-3) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Sat, 06 Dec 2008 16:53:25 +0100
 
-collectd (4.4.2-2) unstable; urgency=low
+ss-collectd (4.4.2-2) unstable; urgency=low
 
   * Removed the work around for #474087 (broken openipmi .pc files) introduced
     in 4.4.1-1 and instead build depend on libopenipmi-dev (>= 2.0.14-1~)
@@ -898,7 +875,7 @@ collectd (4.4.2-2) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Thu, 18 Sep 2008 19:12:54 +0200
 
-collectd (4.4.2-1) unstable; urgency=low
+ss-collectd (4.4.2-1) unstable; urgency=low
 
   * New upstream release.
   * Removed librrd0-dev and libmysqlclient14-dev from the build-dependencies -
@@ -919,7 +896,7 @@ collectd (4.4.2-1) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Fri, 25 Jul 2008 19:58:58 +0200
 
-collectd (4.4.1-2) unstable; urgency=low
+ss-collectd (4.4.1-2) unstable; urgency=low
 
   * Restrict libcurl4-gnutls-dev build dependency to versions which are not
     affected by #488701 (Closes: #489091).
@@ -937,7 +914,7 @@ collectd (4.4.1-2) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Mon, 07 Jul 2008 20:45:53 +0000
 
-collectd (4.4.1-1) unstable; urgency=low
+ss-collectd (4.4.1-1) unstable; urgency=low
 
   * New upstream release.
     - Fixed another issue of the sensors plugin affecting some chip types
@@ -966,7 +943,7 @@ collectd (4.4.1-1) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Tue, 17 Jun 2008 10:35:51 +0200
 
-collectd (4.3.2-1) unstable; urgency=low
+ss-collectd (4.3.2-1) unstable; urgency=low
 
   * New upstream release.
     - Fixed handling of ignored sensors instances (Closes: #468143).
@@ -986,7 +963,7 @@ collectd (4.3.2-1) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Mon, 31 Mar 2008 12:13:18 +0200
 
-collectd (4.3.0-2) unstable; urgency=low
+ss-collectd (4.3.0-2) unstable; urgency=low
 
   * Added "lm-sensors" to the recommended packages and README.Debian.plugins
     (this is required by the sensors plugin).
@@ -998,7 +975,7 @@ collectd (4.3.0-2) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Thu, 06 Mar 2008 23:37:44 +0100
 
-collectd (4.3.0-1) unstable; urgency=low
+ss-collectd (4.3.0-1) unstable; urgency=low
 
   * New upstream release.
     - Added basic support for monitoring by introducing notifications and
@@ -1028,7 +1005,7 @@ collectd (4.3.0-1) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Tue, 19 Feb 2008 21:44:42 +0100
 
-collectd (4.2.4-1) experimental; urgency=low
+ss-collectd (4.2.4-1) experimental; urgency=low
 
   * New upstream release.
   * Added versioned build-dependency on dpkg-dev (>= 1.14.10); collectd FTBFS
@@ -1044,7 +1021,7 @@ collectd (4.2.4-1) experimental; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Sun, 27 Jan 2008 18:34:23 +0100
 
-collectd (4.2.1-1) experimental; urgency=low
+ss-collectd (4.2.1-1) experimental; urgency=low
 
   * New upstream release.
   * Changed XS-Vcs-* to Vcs-*.
@@ -1055,7 +1032,7 @@ collectd (4.2.1-1) experimental; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Wed, 21 Nov 2007 09:50:46 +0000
 
-collectd (4.2.0-1) experimental; urgency=low
+ss-collectd (4.2.0-1) experimental; urgency=low
 
   * New upstream release.
     - Added options to collectd2html.pl to specify host and data directory
@@ -1084,7 +1061,7 @@ collectd (4.2.0-1) experimental; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Sun, 28 Oct 2007 13:38:21 +0100
 
-collectd (4.0.7-1) experimental; urgency=low
+ss-collectd (4.0.7-1) experimental; urgency=low
 
   * New upstream release.
   * Disable iptables and nut plugins on hppa as well to work around a FTBFS
@@ -1096,13 +1073,13 @@ collectd (4.0.7-1) experimental; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Fri, 31 Aug 2007 10:04:41 +0200
 
-collectd (4.0.3-1) experimental; urgency=low
+ss-collectd (4.0.3-1) experimental; urgency=low
 
   * New upstream release.
 
  -- Sebastian Harl <sh@tokkee.org>  Tue, 19 Jun 2007 21:41:21 +0100
 
-collectd (4.0.2-1) experimental; urgency=low
+ss-collectd (4.0.2-1) experimental; urgency=low
 
   * New upstream release (Closes: #428114).
     - Added large file support (Closes: #422212).
@@ -1140,7 +1117,7 @@ collectd (4.0.2-1) experimental; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Wed, 13 Jun 2007 18:58:34 +0100
 
-collectd (3.11.2-1) experimental; urgency=low
+ss-collectd (3.11.2-1) experimental; urgency=low
 
   * New upstream release.
   * Removed sensors-ignorelist.dpatch - has been merged upstream.
@@ -1150,7 +1127,7 @@ collectd (3.11.2-1) experimental; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Thu, 15 Feb 2007 09:19:15 +0000
 
-collectd (3.11.0-1) experimental; urgency=low
+ss-collectd (3.11.0-1) experimental; urgency=low
 
   * New upstream release.
     New plugins:
@@ -1171,7 +1148,7 @@ collectd (3.11.0-1) experimental; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Sun, 24 Dec 2006 14:09:39 +0000
 
-collectd (3.10.4-1) unstable; urgency=low
+ss-collectd (3.10.4-1) unstable; urgency=low
 
   * New upstream release.
     - Fix an infinite loop in server mode if binding to a socket fails and
@@ -1181,7 +1158,7 @@ collectd (3.10.4-1) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Fri, 22 Dec 2006 00:33:30 +0000
 
-collectd (3.10.3-1) unstable; urgency=low
+ss-collectd (3.10.3-1) unstable; urgency=low
 
   * New upstream release.
   * Made package binNMUable:
@@ -1190,7 +1167,7 @@ collectd (3.10.3-1) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Mon,  6 Nov 2006 13:09:28 +0000
 
-collectd (3.10.2-1) unstable; urgency=low
+ss-collectd (3.10.2-1) unstable; urgency=low
 
   * New upstream release.
     - Retry connecting to remote host and database in ping and mysql plugins
@@ -1200,7 +1177,7 @@ collectd (3.10.2-1) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Fri,  3 Nov 2006 15:18:17 +0000
 
-collectd (3.10.1-4) unstable; urgency=low
+ss-collectd (3.10.1-4) unstable; urgency=low
 
   * Changed collectd-dbg's section and priority to "devel" and "extra"
     respectively.
@@ -1209,19 +1186,19 @@ collectd (3.10.1-4) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Thu,  5 Oct 2006 10:25:07 +0000
 
-collectd (3.10.1-3) unstable; urgency=low
+ss-collectd (3.10.1-3) unstable; urgency=low
 
   * Added --oknodo to start-stop-daemon in the init script (Closes: #379703).
 
  -- Sebastian Harl <sh@tokkee.org>  Tue, 25 Jul 2006 18:34:55 +0200
 
-collectd (3.10.1-2) unstable; urgency=low
+ss-collectd (3.10.1-2) unstable; urgency=low
 
   * Added collectd-dbg package.
 
  -- Sebastian Harl <sh@tokkee.org>  Sun, 23 Jul 2006 23:39:42 +0200
 
-collectd (3.10.1-1) unstable; urgency=low
+ss-collectd (3.10.1-1) unstable; urgency=low
 
   * New upstream release.
   * Dynamically link against external liboping.
@@ -1232,7 +1209,7 @@ collectd (3.10.1-1) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Sat, 22 Jul 2006 21:43:37 +0200
 
-collectd (3.10.0-1) unstable; urgency=low
+ss-collectd (3.10.0-1) unstable; urgency=low
 
   * New upstream release.
     New plugins:
@@ -1246,7 +1223,7 @@ collectd (3.10.0-1) unstable; urgency=low
 
  -- Sebastian Harl <sh@tokkee.org>  Sun,  9 Jul 2006 21:52:13 +0200
 
-collectd (3.9.4+debian-1) unstable; urgency=low
+ss-collectd (3.9.4+debian-1) unstable; urgency=low
 
   * Initial release (Closes: #373008).
   * Removed upstream's debian/ directory from .orig.tar.gz.

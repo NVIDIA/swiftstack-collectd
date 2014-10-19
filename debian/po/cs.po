@@ -17,7 +17,7 @@ msgstr ""
 
 #. Type: note
 #. Description
-#: ../collectd-core.templates:1001
+#: ../ss-collectd.templates:1001
 msgid "Layout of RRD files has changed"
 msgstr "Uspořádání souborů RRD se změnilo"
 
@@ -25,21 +25,21 @@ msgstr "Uspořádání souborů RRD se změnilo"
 #. Description
 #. Type: boolean
 #. Description
-#: ../collectd-core.templates:1001 ../collectd-core.templates:2001
+#: ../ss-collectd.templates:1001 ../ss-collectd.templates:2001
 msgid ""
 "The layout of the RRD files created by collectd has changed significantly "
 "since version 3.x. In order to keep your old data you have to migrate it. "
-"This can be done by using /usr/lib/collectd-core/utils/migrate-3-4.px."
+"This can be done by using /usr/lib/ss-collectd/utils/migrate-3-4.px."
 msgstr ""
 "Ve struktuře souborů RRD vytvořených collectd počínaje verzí 3.x došlo k "
 "výrazné změně. Pro uchování vašich dat je nutná jejich migrace. Tu můžete "
-"provést pomocí /usr/lib/collectd-core/utils/migrate-3-4.px."
+"provést pomocí /usr/lib/ss-collectd/utils/migrate-3-4.px."
 
 #. Type: note
 #. Description
 #. Type: note
 #. Description
-#: ../collectd-core.templates:1001 ../collectd-core.templates:3001
+#: ../ss-collectd.templates:1001 ../ss-collectd.templates:3001
 msgid ""
 "This step requires both the perl and the rrdtool packages to be installed, "
 "which is currently not the case. You need to perform the migration manually."
@@ -51,16 +51,16 @@ msgstr ""
 #. Description
 #. Type: boolean
 #. Description
-#: ../collectd-core.templates:1001 ../collectd-core.templates:2001
-msgid "See /usr/share/doc/collectd-core/NEWS.Debian for details."
+#: ../ss-collectd.templates:1001 ../ss-collectd.templates:2001
+msgid "See /usr/share/doc/ss-collectd/NEWS.Debian for details."
 msgstr ""
-"Pro více informací se podívejte na /usr/share/doc/collectd-core/NEWS.Debian."
+"Pro více informací se podívejte na /usr/share/doc/ss-collectd/NEWS.Debian."
 
 #. Type: boolean
 #. Description
 #. Type: boolean
 #. Description
-#: ../collectd-core.templates:2001 ../collectd-core.templates:4001
+#: ../ss-collectd.templates:2001 ../ss-collectd.templates:4001
 msgid "Automatically try to migrate your RRD files?"
 msgstr "Pokusit se o automatickou migraci souborů RRD?"
 
@@ -68,7 +68,7 @@ msgstr "Pokusit se o automatickou migraci souborů RRD?"
 #. Description
 #. Type: boolean
 #. Description
-#: ../collectd-core.templates:2001 ../collectd-core.templates:4001
+#: ../ss-collectd.templates:2001 ../ss-collectd.templates:4001
 msgid ""
 "This step can be done automatically. In this case a backup of /var/lib/"
 "collectd/ is made in /var/backups/. This script is still experimental, "
@@ -80,7 +80,7 @@ msgstr ""
 
 #. Type: note
 #. Description
-#: ../collectd-core.templates:3001
+#: ../ss-collectd.templates:3001
 msgid "Layout of RRD files has changed in version 5.0"
 msgstr "Uspořádání souborů RRD se změnilo ve verzi 5.0"
 
@@ -88,38 +88,38 @@ msgstr "Uspořádání souborů RRD se změnilo ve verzi 5.0"
 #. Description
 #. Type: boolean
 #. Description
-#: ../collectd-core.templates:3001 ../collectd-core.templates:4001
+#: ../ss-collectd.templates:3001 ../ss-collectd.templates:4001
 msgid ""
 "The layout of some RRD files created by collectd has changed since version 4."
 "x. In order to keep your old data you have to migrate it. This can be done "
-"by using /usr/lib/collectd-core/utils/migrate-4-5.px."
+"by using /usr/lib/ss-collectd/utils/migrate-4-5.px."
 msgstr ""
 "Struktura některých souborů RRD vytvořených collectd počínaje verzí 4.x byla "
 "změněna. Pro uchování vašich dat je nutná jejich migrace. Tu můžete provést "
-"pomocí /usr/lib/collectd-core/utils/migrate-4-5.px."
+"pomocí /usr/lib/ss-collectd/utils/migrate-4-5.px."
 
 #. Type: note
 #. Description
 #. Type: boolean
 #. Description
-#: ../collectd-core.templates:3001 ../collectd-core.templates:4001
+#: ../ss-collectd.templates:3001 ../ss-collectd.templates:4001
 msgid ""
-"See /usr/share/doc/collectd-core/NEWS.Debian and the collectd wiki at "
+"See /usr/share/doc/ss-collectd/NEWS.Debian and the collectd wiki at "
 "<http://collectd.org/wiki/index.php/V4_to_v5_migration_guide> for details."
 msgstr ""
-"Pro více informací se podívejte do souboru /usr/share/doc/collectd-core/NEWS."
+"Pro více informací se podívejte do souboru /usr/share/doc/ss-collectd/NEWS."
 "Debian a na wiki collectd na adrese <http://collectd.org/wiki/index.php/"
 "V4_to_v5_migration_guide>."
 
 #. Type: boolean
 #. Description
-#: ../collectd-core.templates:5001
+#: ../ss-collectd.templates:5001
 msgid "Remove all collected data (e.g. RRD files)?"
 msgstr "Smazat všechna získaná data (např. soubory RRD)?"
 
 #. Type: boolean
 #. Description
-#: ../collectd-core.templates:5001
+#: ../ss-collectd.templates:5001
 msgid ""
 "The /var/lib/collectd/ directory which contains the data files containing "
 "the collected statistics is about to be removed. For example, this directory "
@@ -131,7 +131,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../collectd-core.templates:5001
+#: ../ss-collectd.templates:5001
 msgid ""
 "If you're purging the collectd package in order to replace it with a more "
 "recent or custom version or if you want to keep the data for further "
