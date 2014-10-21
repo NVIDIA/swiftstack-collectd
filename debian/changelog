@@ -1,3 +1,9 @@
+ss-collectd (5.2.1-2) precise; urgency=low
+
+  * Update version to match CentOS
+
+ -- SwiftStack Inc. <contact@swiftstack.net>  Tue, 21 Oct 2014 20:25:16 +0000
+
 ss-collectd (5.2.1-1) precise; urgency=low
 
   * Renamed SwiftStack packaging from collectd to ss-collectd
