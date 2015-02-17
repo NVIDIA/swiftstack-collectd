@@ -92,6 +92,8 @@
 #  ifndef CONFIG_HZ
 #    define CONFIG_HZ 100
 #  endif
+#  include <sys/types.h>
+#  include <dirent.h>
 /* #endif KERNEL_LINUX */
 
 #elif HAVE_LIBKVM_GETPROCS && (HAVE_STRUCT_KINFO_PROC_FREEBSD || HAVE_STRUCT_KINFO_PROC_OPENBSD)
@@ -186,6 +188,9 @@ typedef struct procstat_entry_s
 	derive_t io_syscr;
 	derive_t io_syscw;
 
+	/* descriptor data */
+	unsigned long fd_count;
+
 	struct procstat_entry_s *next;
 } procstat_entry_t;
 
@@ -216,6 +221,9 @@ typedef struct procstat
 	derive_t io_wchar;
 	derive_t io_syscr;
 	derive_t io_syscw;
+
+	/* descriptor data */
+	unsigned long fd_count;
 
 	struct procstat   *next;
 	struct procstat_entry_s *instances;
@@ -407,6 +415,7 @@ static void ps_list_add (const char *name, const char *cmdline, procstat_entry_t
 		pse->io_wchar   = entry->io_wchar;
 		pse->io_syscr   = entry->io_syscr;
 		pse->io_syscw   = entry->io_syscw;
+		pse->fd_count   = entry->fd_count;
 
 		ps->num_proc   += pse->num_proc;
 		ps->num_lwp    += pse->num_lwp;
@@ -420,6 +429,8 @@ static void ps_list_add (const char *name, const char *cmdline, procstat_entry_t
 		ps->io_wchar   += ((pse->io_wchar == -1)?0:pse->io_wchar);
 		ps->io_syscr   += ((pse->io_syscr == -1)?0:pse->io_syscr);
 		ps->io_syscw   += ((pse->io_syscw == -1)?0:pse->io_syscw);
+
+		ps->fd_count += pse->fd_count;
 
 		if ((entry->vmem_minflt_counter == 0)
 				&& (entry->vmem_majflt_counter == 0))
@@ -517,6 +528,7 @@ static void ps_list_reset (void)
 		ps->io_wchar = -1;
 		ps->io_syscr = -1;
 		ps->io_syscw = -1;
+		ps->fd_count = 0;
 
 		pse_prev = NULL;
 		pse = ps->instances;
@@ -765,19 +777,26 @@ static void ps_submit_proc_list (procstat_t *ps)
 		plugin_dispatch_values (&vl);
 	}
 
+	sstrncpy (vl.type, "ps_fd_count", sizeof (vl.type));
+	vl.values[0].gauge = ps->fd_count;
+	vl.values_len = 1;
+	plugin_dispatch_values (&vl);
+
 	DEBUG ("name = %s; num_proc = %lu; num_lwp = %lu; "
 			"vmem_size = %lu; vmem_rss = %lu; vmem_data = %lu; "
 			"vmem_code = %lu; "
 			"vmem_minflt_counter = %"PRIi64"; vmem_majflt_counter = %"PRIi64"; "
 			"cpu_user_counter = %"PRIi64"; cpu_system_counter = %"PRIi64"; "
 			"io_rchar = %"PRIi64"; io_wchar = %"PRIi64"; "
-			"io_syscr = %"PRIi64"; io_syscw = %"PRIi64";",
+			"io_syscr = %"PRIi64"; io_syscw = %"PRIi64"; "
+			"fd_count = %lu;",
 			ps->name, ps->num_proc, ps->num_lwp,
 			ps->vmem_size, ps->vmem_rss,
 			ps->vmem_data, ps->vmem_code,
 			ps->vmem_minflt_counter, ps->vmem_majflt_counter,
 			ps->cpu_user_counter, ps->cpu_system_counter,
-			ps->io_rchar, ps->io_wchar, ps->io_syscr, ps->io_syscw);
+			ps->io_rchar, ps->io_wchar, ps->io_syscr, ps->io_syscw,
+			ps->fd_count);
 } /* void ps_submit_proc_list */
 
 #if KERNEL_LINUX || KERNEL_SOLARIS
@@ -968,6 +987,8 @@ static int ps_read_process (long pid, procstat_t *ps, char *state)
 	long long unsigned vmem_rss;
 	long long unsigned stack_size;
 
+	DIR *dir = NULL;
+
 	memset (ps, 0, sizeof (procstat_t));
 
 	ssnprintf (filename, sizeof (filename), "/proc/%li/stat", pid);
@@ -1091,6 +1112,29 @@ static int ps_read_process (long pid, procstat_t *ps, char *state)
 
 		DEBUG("ps_read_process: not get io data for pid %li", pid);
 	}
+
+	/* Read open file descriptor count */
+        ps->fd_count = 0;
+	ssnprintf (filename, sizeof (filename), "/proc/%i/fd", pid);
+	dir = opendir((const char *)filename);
+	if (NULL == dir) {
+	    DEBUG("error in opendir(%s): %s", filename, strerror(errno));
+        } else {
+            struct dirent *dent = NULL;
+            int rc;
+            for (dent = readdir(dir), errno = 0; dent != NULL;
+                    dent = readdir(dir)) {
+                if (0 != strncmp(dent->d_name, ".", 2) &&
+                        0 != strncmp(dent->d_name, "..", 3))
+                    ps->fd_count++;
+            }
+            if (errno)
+                DEBUG("error in readdir(%s): %s", filename, strerror(errno));
+
+            rc = closedir(dir);
+            if (0 != rc)
+                DEBUG("error in closedir(%s): %s", filename, strerror(errno));
+        }
 
 	/* success */
 	return (0);
@@ -1793,6 +1837,8 @@ static int ps_read (void)
 		pse.io_wchar = ps.io_wchar;
 		pse.io_syscr = ps.io_syscr;
 		pse.io_syscw = ps.io_syscw;
+
+		pse.fd_count = ps.fd_count;
 
 		switch (state)
 		{
