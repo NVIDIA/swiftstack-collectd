@@ -251,6 +251,7 @@ install-arch: build
 	rm -f debian/tmp/opt/ss/lib/pkgconfig/libcollectdclient.pc
 	rm -f debian/tmp/opt/ss/include/collectd/*.h
 	rm -f debian/tmp/opt/ss/bin/collectd-nagios
+	rm -r debian/tmp/etc/init.d/collectd
 
 	dh_install -a --sourcedir=$(CURDIR)/debian/tmp --fail-missing
 	

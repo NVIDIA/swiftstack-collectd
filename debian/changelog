@@ -1,3 +1,9 @@
+ss-collectd (5.2.1-10) precise; urgency=low
+
+  * Try to package w/o /etc/init.d/collectd script
+
+ -- SwiftStack Inc. <darrell@swiftstack.com>  Wed, 2 Mar 2016 20:25:16 +0000
+
 ss-collectd (5.2.1-9) precise; urgency=low
 
   * (No actual change, just keeping ubuntu/centos versions synced)

@@ -1,3 +1,0 @@
-src/liboconfig/oconfig.h usr/include/collectd/liboconfig
-src/*.h usr/include/collectd/core
-
