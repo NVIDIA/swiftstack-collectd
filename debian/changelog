@@ -1,4 +1,4 @@
-ss-collectd (5.2.1-10) precise; urgency=low
+ss-collectd (5.2.1-11) precise; urgency=low
 
   * Try to package w/o /etc/init.d/collectd script
 
