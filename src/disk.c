@@ -271,6 +271,30 @@ static void disk_submit (const char *plugin_instance,
 	plugin_dispatch_values (&vl);
 } /* void disk_submit */
 
+static void disk_submit_gauge (const char *plugin_instance,
+                               const char *type, gauge_t value)
+{
+	value_t values[1];
+	value_list_t vl = VALUE_LIST_INIT;
+
+	/* Both `ignorelist' and `plugin_instance' may be NULL. */
+	if (ignorelist_match (ignorelist, plugin_instance) != 0)
+	  return;
+
+	values[0].gauge = value;
+
+	vl.values = values;
+	vl.values_len = 1;
+	sstrncpy (vl.host, hostname_g, sizeof (vl.host));
+	sstrncpy (vl.plugin, "disk", sizeof (vl.plugin));
+	sstrncpy (vl.plugin_instance, plugin_instance,
+			sizeof (vl.plugin_instance));
+	sstrncpy (vl.type, type, sizeof (vl.type));
+
+	plugin_dispatch_values (&vl);
+} /* void disk_submit_gauge */
+
+
 #if KERNEL_LINUX
 static void submit_in_progress (char const *disk_name, gauge_t in_progress)
 {
@@ -528,6 +552,7 @@ static int disk_read (void)
 	derive_t io_time       = 0;
 	derive_t weighted_time = 0;
 	int is_disk = 0;
+	gauge_t disk_count = 0;
 
 	diskstats_t *ds, *pre_ds;
 
@@ -734,6 +759,7 @@ static int disk_read (void)
 
 		if (is_disk)
 		{
+			disk_count += 1;
 			disk_submit (output_name, "disk_merged",
 					read_merged, write_merged);
 			submit_in_progress (output_name, in_progress);
@@ -743,6 +769,7 @@ static int disk_read (void)
 		/* release udev-based alternate name, if allocated */
 		free(alt_name);
 	} /* while (fgets (buffer, sizeof (buffer), fh) != NULL) */
+        disk_submit_gauge ("", "disk_count", disk_count);
 
 #if HAVE_LIBUDEV
 	udev_unref(handle_udev);
