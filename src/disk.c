@@ -308,7 +308,7 @@ static void submit_io_time (char const *plugin_instance, derive_t io_time, deriv
 	sstrncpy (vl.host, hostname_g, sizeof (vl.host));
 	sstrncpy (vl.plugin, "disk", sizeof (vl.plugin));
 	sstrncpy (vl.plugin_instance, plugin_instance, sizeof (vl.plugin_instance));
-	sstrncpy (vl.type, "disk_io_time", sizeof (vl.type));
+	sstrncpy (vl.type, "disk_io_millis", sizeof (vl.type));
 
 	plugin_dispatch_values (&vl);
 }
