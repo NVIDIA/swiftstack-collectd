@@ -1115,7 +1115,7 @@ static int ps_read_process (long pid, procstat_t *ps, char *state)
 
 	/* Read open file descriptor count */
         ps->fd_count = 0;
-	ssnprintf (filename, sizeof (filename), "/proc/%i/fd", pid);
+	ssnprintf (filename, sizeof (filename), "/proc/%li/fd", pid);
 	dir = opendir((const char *)filename);
 	if (NULL == dir) {
 	    DEBUG("error in opendir(%s): %s", filename, strerror(errno));
