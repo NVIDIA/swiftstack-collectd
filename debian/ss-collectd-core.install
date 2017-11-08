@@ -1,0 +1,16 @@
+../../contrib/migrate-3-4.px opt/ss/usr/lib/collectd/utils
+../../contrib/migrate-4-5.px opt/ss/usr/lib/collectd/utils
+../../contrib/rrd_filter.px opt/ss/usr/lib/collectd/utils
+../collection.conf opt/ss/etc/collectd/
+opt/ss/usr/lib/collectd/*.so
+opt/ss/usr/sbin
+opt/ss/usr/share/collectd
+opt/ss/usr/share/man/man1/collectdmon.1
+opt/ss/usr/share/man/man1/collectd.1
+opt/ss/usr/share/man/man3/Collectd::Unixsock.3pm
+opt/ss/usr/share/man/man5/collectd-*.5
+opt/ss/usr/share/man/man5/collectd.conf.5
+opt/ss/usr/share/man/man5/types.db.5
+opt/ss/usr/share/lib/perl5
+opt/ss/var
+

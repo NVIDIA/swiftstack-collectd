@@ -1,0 +1,7 @@
+opt/ss/usr/bin/collectdctl
+opt/ss/usr/bin/collectd-nagios
+opt/ss/usr/bin/collectd-tg
+opt/ss/usr/share/man/man1/collectdctl.1
+opt/ss/usr/share/man/man1/collectd-nagios.1
+opt/ss/usr/share/man/man1/collectd-tg.1
+

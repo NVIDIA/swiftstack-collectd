@@ -1,0 +1,7 @@
+opt/ss/usr/include/collectd/client.h usr/include/collectd
+opt/ss/usr/include/collectd/lcc_features.h usr/include/collectd
+opt/ss/usr/include/collectd/network.h usr/include/collectd
+opt/ss/usr/include/collectd/network_buffer.h usr/include/collectd
+opt/ss/usr/lib/pkgconfig/libcollectdclient.pc
+opt/ss/usr/lib/libcollectdclient.so
+
