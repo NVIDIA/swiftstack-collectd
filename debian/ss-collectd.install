@@ -1,2 +1,0 @@
-../collectd.conf opt/ss/etc/collectd/
-../thresholds.conf ../filters.conf opt/ss/etc/collectd/collectd.conf.d/

@@ -2,17 +2,13 @@
 Description=Statistics collection and monitoring daemon
 After=local-fs.target network.target
 Requires=local-fs.target network.target
-ConditionPathExists=/opt/ss/etc/collectd/collectd.conf
-Documentation=man:collectd(1)
-Documentation=man:collectd.conf(5)
-Documentation=https://collectd.org
+ConditionPathExists=/opt/ss/etc/collectd.conf
 
 [Service]
 Type=notify
 NotifyAccess=main
-EnvironmentFile=-/etc/default/ss-collectd
-ExecStartPre=/opt/ss/usr/sbin/collectd -t -C /opt/ss/etc/collectd/collectd.conf
-ExecStart=/opt/ss/usr/sbin/collectd
+ExecStartPre=/opt/ss/sbin/collectd -t -C /opt/ss/etc/collectd.conf
+ExecStart=/opt/ss/sbin/collectd
 Restart=always
 RestartSec=10
 

@@ -13,3 +13,5 @@ ss-collectd-core: capitalization-error-in-description python Python
 # though ...
 ss-collectd-core: binary-or-shlib-defines-rpath usr/lib/collectd/java.so /usr/lib/jvm/*/jre/lib/*/*
 
+ss-collectd-core: unstripped-binary-or-object
+ss-collectd-core: dir-or-file-in-opt opt/ss/*

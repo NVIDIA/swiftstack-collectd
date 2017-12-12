@@ -27,7 +27,7 @@ case "$1" in
         if [ "$RET" = "true" ]; then
             rm -rf /opt/ss/var/lib/collectd
         fi
-        rm -rf /opt/ss/etc/collectd
+        rm -rf /opt/ss/etc/collectd.conf
         ;;
 
     remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
