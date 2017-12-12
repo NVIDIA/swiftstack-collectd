@@ -58,6 +58,6 @@ Vcs-Browser: http://git.tokkee.org/?p=pkg-collectd.git
 
 Package: ss-collectd-core
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, libltdl7, libpython2.7
 Description: statistics collection and monitoring daemon (core system)
  Packaged by SwiftStack.

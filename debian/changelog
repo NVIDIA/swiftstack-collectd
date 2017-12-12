@@ -1,4 +1,4 @@
-ss-collectd (5.5.2.4-2) xenial; urgency=medium
+ss-collectd (5.5.2.4-3) xenial; urgency=medium
 
   * Building patched 5.5.2.x for Trusty & Xenial
 
