@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Sebastian Harl <tokkee@debian.org>
 Uploaders: Marc Fournier <marc@bl.uem.li>
-Build-Depends: debhelper (>= 7.0.50~), dpkg-dev (>= 1.14.10), po-debconf,
+Build-Depends: debhelper (>= 7.0.50~), dpkg-dev (>= 1.14.10),
  dh-systemd (>= 1.5),
  bison, flex, autotools-dev, libltdl-dev, pkg-config,
  automake, dh-autoreconf,
@@ -51,16 +51,16 @@ Build-Depends: debhelper (>= 7.0.50~), dpkg-dev (>= 1.14.10), po-debconf,
  linux-libc-dev (>= 2.6.25-4) [linux-any] | linux-libc-dev (<< 2.6.25-1) [linux-any],
  python-dev
 Build-Conflicts: libpthread-dev, libhal-dev
-Breaks: ss-collectd
-Replaces: ss-collectd
-Conflicts: ss-collectd
 Standards-Version: 3.9.6
 Homepage: http://collectd.org/
 Vcs-Git: git://git.tokkee.org/pkg-collectd.git
 Vcs-Browser: http://git.tokkee.org/?p=pkg-collectd.git
 
-Package: ss-collectd-core
+Package: ss-collectd
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libltdl7, libpython2.7
-Description: statistics collection and monitoring daemon (core system)
+Breaks: ss-collectd-core
+Conflicts: ss-collectd-core
+Replaces: ss-collectd-core
+Description: statistics collection and monitoring daemon
  Packaged by SwiftStack.

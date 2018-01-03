@@ -1,6 +1,6 @@
-ss-collectd (5.5.2.4-4) xenial; urgency=medium
+ss-collectd (5.5.2.4-5) xenial; urgency=medium
 
-  * -4: Conflicts/Breaks/Replaces `ss-collectd` to allow upgrade
+  * -5: rename pkg to ss-collectd
   * Building patched 5.5.2.x for Trusty & Xenial
 
  -- Robie Basak <robie.basak@ubuntu.com>  Tue, 05 Apr 2016 12:17:51 +0000

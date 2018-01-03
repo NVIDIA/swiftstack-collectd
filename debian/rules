@@ -198,9 +198,9 @@ install-arch: build
 	
 	perl ./debian/bin/gen_plugin_deps.pl
 	
-	mkdir -p debian/ss-collectd-core/opt/ss/share/lintian/overrides/
-	cp debian/ss-collectd-core.overrides \
-		debian/ss-collectd-core/opt/ss/share/lintian/overrides/ss-collectd-core
+	mkdir -p debian/ss-collectd/opt/ss/share/lintian/overrides/
+	cp debian/ss-collectd.overrides \
+		debian/ss-collectd/opt/ss/share/lintian/overrides/ss-collectd
 
 binary-indep: install-indep
 	dh_testdir
@@ -220,15 +220,15 @@ binary-arch: build install-arch
 	dh_installdocs -A -a debian/README.Debian AUTHORS README TODO
 	dh_installdocs -a debian/NEWS.Debian debian/README.Debian.plugins
 	dh_installdebconf -a
-	dh_systemd_enable -pss-collectd-core --name=ss-collectd
-	dh_installinit -pss-collectd-core --name=ss-collectd -- defaults 95
-	dh_systemd_start -pss-collectd-core
+	dh_systemd_enable -pss-collectd --name=ss-collectd
+	dh_installinit -pss-collectd --name=ss-collectd -- defaults 95
+	dh_systemd_start -pss-collectd
 	dh_link -a
 	dh_strip -a
 	dh_fixperms -a
 	dh_makeshlibs -a
 	dh_installdeb -a
-	dh_shlibdeps -a -Nss-collectd-core
+	dh_shlibdeps -a -Nss-collectd
 	dh_gencontrol -a
 	dh_md5sums -a
 	dh_builddeb -a
