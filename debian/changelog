@@ -1,5 +1,6 @@
-ss-collectd (5.5.2.4-5) xenial; urgency=medium
+ss-collectd (5.5.2.4-14) xenial; urgency=medium
 
+  * -14: fix openvpn status file parsing for newer OpenVPN 2.4 dudes
   * -5: rename pkg to ss-collectd
   * Building patched 5.5.2.x for Trusty & Xenial
 

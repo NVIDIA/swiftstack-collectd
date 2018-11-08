@@ -759,68 +759,25 @@ then
 	CFLAGS="$CFLAGS -Wall -Werror"
 fi
 
-AC_CACHE_CHECK([for strtok_r],
-  [c_cv_have_strtok_r_default],
-  AC_LINK_IFELSE(
-    [AC_LANG_PROGRAM(
-[[[
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-]]],
-[[[
-      char buffer[] = "foo,bar,baz";
-      char *token;
-      char *dummy;
-      char *saveptr;
-
-      dummy = buffer;
-      saveptr = NULL;
-      while ((token = strtok_r (dummy, ",", &saveptr)) != NULL)
-      {
-        dummy = NULL;
-        printf ("token = %s;\n", token);
-      }
-]]]
-    )],
-    [c_cv_have_strtok_r_default="yes"],
-    [c_cv_have_strtok_r_default="no"]
-  )
-)
-
-if test "x$c_cv_have_strtok_r_default" = "xno"
+AC_CHECK_DECL(strtok_r, [], [],
+              [
+                #include <string.h>
+              ])
+if test "x$ac_cv_have_decl_strtok_r" = "xno"
 then
-  CFLAGS="$CFLAGS -D_REENTRANT=1"
-
-  AC_CACHE_CHECK([if strtok_r needs _REENTRANT],
-    [c_cv_have_strtok_r_reentrant],
-    AC_LINK_IFELSE(
-      [AC_LANG_PROGRAM(
-[[[
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-]]],
-[[[
-        char buffer[] = "foo,bar,baz";
-        char *token;
-        char *dummy;
-        char *saveptr;
-
-        dummy = buffer;
-        saveptr = NULL;
-        while ((token = strtok_r (dummy, ",", &saveptr)) != NULL)
-        {
-          dummy = NULL;
-          printf ("token = %s;\n", token);
-        }
-]]]
-      )],
-      [c_cv_have_strtok_r_reentrant="yes"],
-      [AC_MSG_FAILURE([strtok_r isn't available. Please file a bugreport!])]
-    )
-  )
+	AC_MSG_NOTICE([Retrying with -D_REENTRANT])
+	# reset cached result to force re-check
+	unset ac_cv_have_decl_strtok_r
+	AC_CHECK_DECL(strtok_r,
+	              [ CFLAGS=$CFLAGS" -D_REENTRANT=1" ],
+		      [],
+	              [
+	               #define _REENTRANT 1
+	               #include <string.h>
+	              ])
 fi
+
+AC_CHECK_FUNC(strtok_r, [], [AC_MSG_FAILURE([strtok_r isn't available. Please file a bugreport!])])
 
 CFLAGS="$SAVE_CFLAGS"
 if test "x$c_cv_have_strtok_r_reentrant" = "xyes"
