@@ -1,6 +1,6 @@
 [Unit]
 Description=Statistics collection and monitoring daemon
-After=local-fs.target network.target
+After=local-fs.target network.target ssnoded.service
 Requires=local-fs.target network.target
 ConditionPathExists=/opt/ss/etc/collectd.conf
 
@@ -8,6 +8,8 @@ ConditionPathExists=/opt/ss/etc/collectd.conf
 Type=notify
 NotifyAccess=main
 ExecStartPre=/opt/ss/sbin/collectd -t -C /opt/ss/etc/collectd.conf
+# Maybe give ssnoded time, on boot, to get communication up to controller
+ExecStartPre=/bin/bash -c "sleep 3"
 ExecStart=/opt/ss/sbin/collectd
 Restart=always
 RestartSec=10
