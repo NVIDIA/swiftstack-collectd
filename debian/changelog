@@ -1,5 +1,6 @@
-ss-collectd (5.5.2.4-15) xenial; urgency=medium
+ss-collectd (5.5.2.4-16) xenial; urgency=medium
 
+  * -16: build against our vendored python2
   * -15: try to let ssnoded get communications up before trying
    to send metrics.
   * -14: fix openvpn status file parsing for newer OpenVPN 2.4 dudes

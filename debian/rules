@@ -26,6 +26,12 @@ CPPFLAGS += -DCONFIGFILE='\"/opt/ss/etc/collectd.conf\"'
 
 LDFLAGS = $(shell dpkg-buildflags --get LDFLAGS)
 
+# Catch our vendored python
+CFLAGS += -I/opt/ss/include -I/opt/ss/include/x86_64-linux-gnu
+CPPFLAGS += -I/opt/ss/include -I/opt/ss/include/x86_64-linux-gnu
+LDFLAGS += -L/opt/ss/lib -L/lot/ss/lib/x86_64-linux-gnu \
+           -Wl,-rpath,/opt/ss/lib,-rpath,/opt/ss/lib/x86_64-linux-gnu
+
 confflags = --host=$(DEB_HOST_GNU_TYPE) \
 			--build=$(DEB_BUILD_GNU_TYPE) --prefix=/opt/ss \
 			--mandir=\$${prefix}/share/man \

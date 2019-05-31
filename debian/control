@@ -49,7 +49,8 @@ Build-Depends: debhelper (>= 7.0.50~), dpkg-dev (>= 1.14.10),
  libxml2-dev,
  libyajl-dev,
  linux-libc-dev (>= 2.6.25-4) [linux-any] | linux-libc-dev (<< 2.6.25-1) [linux-any],
- python-dev
+ ss-python,
+# One day: ss-python3
 Build-Conflicts: libpthread-dev, libhal-dev
 Standards-Version: 3.9.6
 Homepage: http://collectd.org/
@@ -58,7 +59,7 @@ Vcs-Browser: http://git.tokkee.org/?p=pkg-collectd.git
 
 Package: ss-collectd
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libltdl7, libpython2.7
+Depends: ${shlibs:Depends}, ${misc:Depends}, libltdl7, ss-python,
 Breaks: ss-collectd-core
 Conflicts: ss-collectd-core
 Replaces: ss-collectd-core
