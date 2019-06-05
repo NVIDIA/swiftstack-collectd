@@ -114,6 +114,7 @@ confflags = --host=$(DEB_HOST_GNU_TYPE) \
 			--enable-processes \
 			--enable-protocols \
 			--enable-python \
+			--with-python=/opt/ss/bin/python \
 			--disable-rrdtool \
 			--disable-sensors \
 			--disable-serial \
