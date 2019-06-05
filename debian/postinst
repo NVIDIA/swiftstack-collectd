@@ -21,6 +21,23 @@ set -e
 
 case "$1" in
     configure)
+      # One-time migration to prepend /opt/ss/bin to $PATH in the Upstart file,
+      # if it exists and doesn't have it already.
+      if [ -f /etc/init/collectd.conf ]; then
+        if ! grep -q 'PATH=/opt/ss/bin:"$PATH"' /etc/init/collectd.conf; then
+          sed -i -e 's,^exec,exec /bin/bash -c '"'"'PATH=/opt/ss/bin:"$PATH" /opt/ss/sbin/collectd -f'"'"' >> /var/log/collectd-upstart 2>&1,g' /etc/init/collectd.conf
+        fi
+        restart collectd || start collectd ||:
+      fi
+
+      if [ -f /lib/systemd/system/ss-collectd.service ]; then
+        if ! grep -q 'PATH=/opt/ss/bin:' /lib/systemd/system/ss-collectd.service; then
+          sed -i -e 's,^Restart=,Environment="PATH=/opt/ss/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"\nRestart=,g' /lib/systemd/system/ss-collectd.service
+        fi
+        systemctl daemon-reload ||:
+        # Maybe the magic debhelper stuff down below will restart it for us??
+        # systemctl restart ss-collectd ||:
+      fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

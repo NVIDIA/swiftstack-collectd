@@ -11,6 +11,7 @@ ExecStartPre=/opt/ss/sbin/collectd -t -C /opt/ss/etc/collectd.conf
 # Maybe give ssnoded time, on boot, to get communication up to controller
 ExecStartPre=/bin/bash -c "sleep 3"
 ExecStart=/opt/ss/sbin/collectd
+Environment="PATH=/opt/ss/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 Restart=always
 RestartSec=10
 
