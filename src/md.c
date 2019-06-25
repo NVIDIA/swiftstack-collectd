@@ -28,6 +28,7 @@
 
 #include <linux/major.h>
 #include <linux/raid/md_u.h>
+#include <sys/sysmacros.h>
 
 #define PROC_DISKSTATS "/proc/diskstats"
 #define DEV_DIR "/dev"
