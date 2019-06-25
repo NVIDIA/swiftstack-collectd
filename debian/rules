@@ -140,6 +140,8 @@ confflags = --host=$(DEB_HOST_GNU_TYPE) \
 			--disable-wireless \
 			--disable-write_http \
 			--with-libiptc \
+			--without-libsigrok \
+			--disable-sigrok \
 			--without-libperl \
 			--without-perl-bindings
 

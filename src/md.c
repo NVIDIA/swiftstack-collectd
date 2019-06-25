@@ -19,6 +19,7 @@
  *   Michael Hanselmann
  **/
 
+#include <sys/sysmacros.h>
 #include "collectd.h"
 #include "common.h"
 #include "plugin.h"
@@ -28,7 +29,6 @@
 
 #include <linux/major.h>
 #include <linux/raid/md_u.h>
-#include <sys/sysmacros.h>
 
 #define PROC_DISKSTATS "/proc/diskstats"
 #define DEV_DIR "/dev"
