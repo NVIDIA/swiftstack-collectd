@@ -1,5 +1,6 @@
-ss-collectd (5.5.2.4-18) xenial; urgency=medium
+ss-collectd (5.5.2.4-19) xenial; urgency=medium
 
+  * -19: fix buffer size bug found during Ubuntu bionic packaging
   * -18: fix $PATH to find vendored python
   * -16: build against our vendored python2
   * -15: try to let ssnoded get communications up before trying
