@@ -1,5 +1,7 @@
-ss-collectd (5.10.0.1-5) bionic; urgency=medium
+ss-collectd (5.10.0.1-7) bionic; urgency=medium
 
+  * -7: include netlink stuff for process delay accounting
+  * -6: compile with --enable-debug
   * -5: fix types.db typo
   * -4: fix deb building
   * -3: sync'ing package ver w/RPM ver.

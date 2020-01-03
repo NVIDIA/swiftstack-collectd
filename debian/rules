@@ -36,6 +36,7 @@ confflags = --host=$(DEB_HOST_GNU_TYPE) \
 			--build=$(DEB_BUILD_GNU_TYPE) --prefix=/opt/ss \
 			--mandir=\$${prefix}/share/man \
 			--localstatedir=/opt/ss/var --sysconfdir=/opt/ss/etc \
+			--enable-debug \
 			--without-libstatgrab \
 			--without-included-ltdl \
 			--disable-static \
@@ -50,7 +51,6 @@ confflags = --host=$(DEB_HOST_GNU_TYPE) \
 			--disable-memcachec \
 			--disable-modbus \
 			--disable-netapp \
-			--disable-netlink \
 			--disable-notify_desktop \
 			--disable-notify_email \
 			--disable-onewire \
