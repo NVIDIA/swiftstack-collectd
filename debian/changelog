@@ -1,5 +1,6 @@
-ss-collectd (5.10.0.1-3) bionic; urgency=medium
+ss-collectd (5.10.0.1-4) bionic; urgency=medium
 
+  * -4: fix deb building
   * -3: sync'ing package ver w/RPM ver.
   * Newer upstream (based off 5.10.0)
 

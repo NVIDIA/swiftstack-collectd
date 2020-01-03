@@ -215,7 +215,7 @@ binary-indep: install-indep
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs -i ChangeLog
-	dh_installdocs -A -i debian/README.Debian AUTHORS README TODO
+	dh_installdocs -A -i debian/README.Debian AUTHORS README
 	dh_fixperms -i
 	dh_installdeb -i
 	dh_gencontrol -i
@@ -226,7 +226,7 @@ binary-arch: build install-arch
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs -a ChangeLog
-	dh_installdocs -A -a debian/README.Debian AUTHORS README TODO
+	dh_installdocs -A -a debian/README.Debian AUTHORS README
 	dh_installdocs -a debian/NEWS.Debian debian/README.Debian.plugins
 	dh_installdebconf -a
 	dh_systemd_enable -pss-collectd --name=ss-collectd
