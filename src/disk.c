@@ -681,7 +681,7 @@ static int disk_read(void) {
   geom_stats_snapshot_free(snap);
 
 #elif KERNEL_LINUX
-  file *fh;
+  FILE *fh;
   char buffer[1024];
 
   char *fields[32];
@@ -696,7 +696,7 @@ static int disk_read(void) {
   derive_t write_ops = 0;
   derive_t write_merged = 0;
   derive_t write_time = 0;
-  gauge_t in_progress = nan;
+  gauge_t in_progress = NAN;
   derive_t io_time = 0;
   derive_t weighted_time = 0;
   int is_disk = 0;
@@ -704,13 +704,13 @@ static int disk_read(void) {
 
   diskstats_t *ds, *pre_ds;
 
-  if ((fh = fopen("/proc/diskstats", "r")) == null) {
-    error("disk plugin: fopen(\"/proc/diskstats\"): %s", strerrno);
+  if ((fh = fopen("/proc/diskstats", "r")) == NULL) {
+    ERROR("disk plugin: fopen(\"/proc/diskstats\") failed");
     return -1;
   }
 
   poll_count++;
-  while (fgets(buffer, sizeof(buffer), fh) != null) {
+  while (fgets(buffer, sizeof(buffer), fh) != NULL) {
     int numfields = strsplit(buffer, fields, 32);
 
     /* need either 7 fields (partition) or at least 14 fields */
@@ -719,21 +719,21 @@ static int disk_read(void) {
 
     char *disk_name = fields[2];
 
-    for (ds = disklist, pre_ds = disklist; ds != null;
+    for (ds = disklist, pre_ds = disklist; ds != NULL;
          pre_ds = ds, ds = ds->next)
       if (strcmp(disk_name, ds->name) == 0)
         break;
 
-    if (ds == null) {
-      if ((ds = calloc(1, sizeof(*ds))) == null)
+    if (ds == NULL) {
+      if ((ds = calloc(1, sizeof(*ds))) == NULL)
         continue;
 
-      if ((ds->name = strdup(disk_name)) == null) {
+      if ((ds->name = strdup(disk_name)) == NULL) {
         free(ds);
         continue;
       }
 
-      if (pre_ds == null)
+      if (pre_ds == NULL)
         disklist = ds;
       else
         pre_ds->next = ds;
