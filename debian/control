@@ -1,0 +1,67 @@
+Source: ss-collectd
+Section: utils
+Priority: optional
+Maintainer: Sebastian Harl <tokkee@debian.org>
+Uploaders: Marc Fournier <marc@bl.uem.li>
+Build-Depends: debhelper (>= 7.0.50~), dpkg-dev (>= 1.14.10),
+ dh-systemd (>= 1.5),
+ bison, flex, autotools-dev, libltdl-dev, pkg-config,
+ automake, dh-autoreconf,
+ iptables-dev (>= 1.4.3.2-2) [linux-any],
+ kfreebsd-kernel-headers [kfreebsd-any],
+ libatasmart-dev [linux-any],
+# libcap-dev [linux-any],
+ libcurl4-gnutls-dev (>= 7.18.2-5) | libcurl4-gnutls-dev (<= 7.18.2-1) | libcurl3-gnutls-dev,
+#libdbi0-dev,
+#libesmtp-dev,
+# libganglia1-dev (>= 3) [linux-any],
+#libgcrypt11-dev,
+ libglib2.0-dev,
+#libhiredis-dev,
+ libi2c-dev,
+# libkvm-dev [kfreebsd-any],
+# libldap2-dev,
+# liblvm2-dev [linux-any],
+ libmemcached-dev,
+#libmodbus-dev,
+ libmnl-dev [linux-any],
+# libmysqlclient-dev,
+ libnotify-dev,
+# libopenipmi-dev,
+ liboping-dev (>= 0.3.3),
+#libow-dev,
+# libpq-dev,
+#librdkafka-dev,
+# librabbitmq-dev,
+#librrd-dev (>= 1.4~),
+#libsensors4-dev [linux-any],
+ libsigrok-dev (>= 0.2~),
+# libsnmp-dev (>= 5.4.2.1~dfsg-4~) | (libsnmp-dev & perl (<< 5.10.1~rc2-1~))
+#libsnmp-dev (>= 5.4.2.1~dfsg-4~) | libsnmp-dev | libsnmp9-dev,
+# libsnmp-dev (>= 5.4.2.1~dfsg-4~) | perl (<< 5.10.1~rc2-1~),
+ perl,
+#libtokyocabinet-dev [linux-any],
+#libtokyotyrant-dev [linux-any],
+ libudev-dev [linux-any],
+#libupsclient-dev | libupsclient1-dev,
+#libvarnishapi-dev,
+# libvirt-dev (>= 0.4.0-6) [linux-any],
+ libxml2-dev,
+ libyajl-dev,
+ linux-libc-dev (>= 2.6.25-4) [linux-any] | linux-libc-dev (<< 2.6.25-1) [linux-any],
+ ss-python,
+# One day: ss-python3
+Build-Conflicts: libpthread-dev, libhal-dev
+Standards-Version: 3.9.6
+Homepage: http://collectd.org/
+Vcs-Git: git://git.tokkee.org/pkg-collectd.git
+Vcs-Browser: http://git.tokkee.org/?p=pkg-collectd.git
+
+Package: ss-collectd
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libltdl7, ss-python,
+Breaks: ss-collectd-core
+Conflicts: ss-collectd-core
+Replaces: ss-collectd-core
+Description: statistics collection and monitoring daemon
+ Packaged by SwiftStack.

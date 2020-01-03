@@ -1,0 +1,247 @@
+#! /usr/bin/make -f
+# debian/rules for collectd
+#
+# Written by Sebastian Harl <tokkee@debian.org>.
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+# These are used for cross-compiling and for saving the configure script
+# from having to guess our platform (since we know it already)
+DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_ARCH      ?= $(shell dpkg-architecture -qDEB_BUILD_ARCH)
+DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all
+
+CPPFLAGS = $(shell dpkg-buildflags --get CPPFLAGS)
+CPPFLAGS += -I$(CURDIR)/debian/include
+CFLAGS = $(shell dpkg-buildflags --get CFLAGS)
+CFLAGS += -Wall -Wno-error=deprecated-declarations
+
+# Upstream defaults to ${sysconfdir}/collectd.conf. Setting ${sysconfdir} to
+# /etc/collectd would be wrong though.
+CPPFLAGS += -UCONFIGFILE
+CPPFLAGS += -DCONFIGFILE='\"/opt/ss/etc/collectd.conf\"'
+
+LDFLAGS = $(shell dpkg-buildflags --get LDFLAGS)
+
+# Catch our vendored python
+CFLAGS += -I/opt/ss/include -I/opt/ss/include/x86_64-linux-gnu
+CPPFLAGS += -I/opt/ss/include -I/opt/ss/include/x86_64-linux-gnu
+LDFLAGS += -L/opt/ss/lib -L/lot/ss/lib/x86_64-linux-gnu \
+           -Wl,-rpath,/opt/ss/lib,-rpath,/opt/ss/lib/x86_64-linux-gnu
+
+confflags = --host=$(DEB_HOST_GNU_TYPE) \
+			--build=$(DEB_BUILD_GNU_TYPE) --prefix=/opt/ss \
+			--mandir=\$${prefix}/share/man \
+			--localstatedir=/opt/ss/var --sysconfdir=/opt/ss/etc \
+			--without-libstatgrab \
+			--without-included-ltdl \
+			--disable-static \
+			--disable-silent-rules \
+			--disable-ascent \
+			--disable-apple_sensors \
+			--disable-curl_json  \
+			--disable-dbi  \
+			--disable-gmond \
+			--disable-ipvs \
+			--disable-java \
+			--disable-memcachec \
+			--disable-modbus \
+			--disable-netapp \
+			--disable-netlink \
+			--disable-notify_desktop \
+			--disable-notify_email \
+			--disable-onewire \
+			--disable-oracle \
+			--disable-pinba \
+			--disable-routeros \
+			--disable-rrdcached \
+			--disable-tape \
+			--disable-tokyotyrant \
+			--disable-xmms \
+			--disable-zfs_arc \
+			--disable-apache \
+			--disable-apcups \
+			--disable-battery \
+			--disable-bind \
+			--enable-conntrack \
+			--enable-contextswitch \
+			--enable-cpu \
+			--enable-cpufreq \
+			--disable-csv \
+			--enable-curl \
+			--enable-curl_xml \
+			--enable-df \
+			--enable-disk \
+			--disable-dns \
+			--disable-email \
+			--enable-entropy \
+			--enable-exec \
+			--enable-filecount \
+			--enable-fscache \
+			--disable-hddtemp \
+			--enable-interface \
+			--disable-ipmi \
+			--enable-iptables \
+			--enable-irq \
+			--disable-libvirt \
+			--enable-load \
+			--enable-logfile \
+			--disable-madwifi \
+			--enable-match_empty_counter \
+			--enable-match_hashed \
+			--enable-match_regex \
+			--enable-match_timediff \
+			--enable-match_value \
+			--disable-mbmon \
+			--enable-memcached \
+			--enable-memory \
+			--disable-multimeter \
+			--disable-mysql \
+			--enable-network \
+			--disable-nfs \
+			--enable-nginx \
+			--enable-ntpd \
+			--disable-nut \
+			--disable-olsrd \
+			--enable-openvpn \
+			--disable-perl \
+			--enable-ping \
+			--disable-postgresql \
+			--disable-powerdns \
+			--enable-processes \
+			--enable-protocols \
+			--enable-python \
+			--with-python=/opt/ss/bin/python \
+			--disable-rrdtool \
+			--disable-sensors \
+			--disable-serial \
+			--disable-snmp \
+			--enable-swap \
+			--disable-syslog \
+			--enable-table \
+			--disable-tail \
+			--disable-target_notification \
+			--disable-target_replace \
+			--disable-target_scale \
+			--disable-target_set \
+			--enable-tcpconns \
+			--disable-teamspeak2 \
+			--disable-ted \
+			--disable-thermal \
+			--enable-unixsock \
+			--enable-uptime \
+			--enable-users \
+			--enable-uuid \
+			--enable-vmem \
+			--disable-vserver \
+			--disable-wireless \
+			--disable-write_http \
+			--with-libiptc \
+			--without-libsigrok \
+			--disable-sigrok \
+			--without-libperl \
+			--without-perl-bindings
+
+configure:
+	mkdir -p libltdl/m4
+	autoreconf -vfi
+
+config.status: configure
+	dh_testdir
+	
+	PKG_CONFIG_PATH="$(CURDIR)/debian/pkgconfig:$$PKG_CONFIG_PATH" \
+	./configure $(confflags) CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" \
+	LDFLAGS="$(LDFLAGS)" || ( status=$$?; cat config.log; exit $$status )
+
+build: build-arch build-indep
+build-arch: build-stamp
+build-indep: build-stamp
+
+build-stamp: config.status
+	dh_testdir
+	
+	$(MAKE)
+	perl ./debian/bin/check_plugins.pl
+	
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	
+	[ ! -f Makefile ] || $(MAKE) distclean
+	
+	rm -f debian/README.Debian.plugins
+	rm -f src/*.1 src/*.5
+	
+	rm -rf debian/pkgconfig
+	
+	dh_clean
+	# debconf-updatepo
+
+install-indep:
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs -i
+	dh_install -i
+	
+
+install-arch: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs -a
+	
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
+	
+	rm -f debian/tmp/opt/ss/lib/collectd/*.la
+	rm -f debian/tmp/opt/ss/lib/libcollectdclient.la
+	rm -f debian/tmp/opt/ss/etc/collectd.conf
+	
+	dh_install -a --sourcedir=$(CURDIR)/debian/tmp --fail-missing
+	
+	perl ./debian/bin/gen_plugin_deps.pl
+	
+	mkdir -p debian/ss-collectd/opt/ss/share/lintian/overrides/
+	cp debian/ss-collectd.overrides \
+		debian/ss-collectd/opt/ss/share/lintian/overrides/ss-collectd
+
+binary-indep: install-indep
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs -i ChangeLog
+	dh_installdocs -A -i debian/README.Debian AUTHORS README TODO
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+binary-arch: build install-arch
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs -a ChangeLog
+	dh_installdocs -A -a debian/README.Debian AUTHORS README TODO
+	dh_installdocs -a debian/NEWS.Debian debian/README.Debian.plugins
+	dh_installdebconf -a
+	dh_systemd_enable -pss-collectd --name=ss-collectd
+	dh_installinit -pss-collectd --name=ss-collectd -- defaults 95
+	dh_systemd_start -pss-collectd
+	dh_link -a
+	dh_strip -a
+	dh_fixperms -a
+	dh_makeshlibs -a
+	dh_installdeb -a
+	dh_shlibdeps -a -Nss-collectd
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+
+binary: binary-arch binary-indep
+.PHONY: build build-arch build-indep clean binary-indep binary-arch binary install-indep install-arch
+

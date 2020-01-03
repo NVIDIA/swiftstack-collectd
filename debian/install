@@ -1,0 +1,15 @@
+opt/ss/lib/libcollectdclient*
+opt/ss/lib/pkgconfig/libcollectdclient.pc
+opt/ss/lib/collectd/*.so
+opt/ss/bin
+opt/ss/sbin
+opt/ss/share/collectd
+opt/ss/share/man/man1/collectdmon.1
+opt/ss/share/man/man1/collectdctl.1
+opt/ss/share/man/man1/collectd.1
+opt/ss/share/man/man1/collectd-*.1
+opt/ss/share/man/man5/collectd-*.5
+opt/ss/share/man/man5/collectd.conf.5
+opt/ss/share/man/man5/types.db.5
+opt/ss/var
+opt/ss/include/collectd

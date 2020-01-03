@@ -5,7 +5,7 @@ After=local-fs.target network-online.target
 Requires=local-fs.target network-online.target
 
 [Service]
-ExecStart=/usr/sbin/collectd
+ExecStart=/usr/sbin/collectd -C /etc/collectd/collectd.conf -f
 EnvironmentFile=-/etc/sysconfig/collectd
 EnvironmentFile=-/etc/default/collectd
 
@@ -25,17 +25,20 @@ EnvironmentFile=-/etc/default/collectd
 #   turbostat       CAP_SYS_RAWIO
 #
 # Example, if you use the iptables plugin alongside the dns or ping plugin:
-#CapabilityBoundingSet=CAP_NET_RAW CAP_NET_ADMIN
+CapabilityBoundingSet=CAP_NET_RAW CAP_SETUID CAP_SETGID CAP_NET_ADMIN CAP_NET_ADMIN CAP_SYS_RAWIO
 #
 # By default, drop all capabilities:
-CapabilityBoundingSet=
+#CapabilityBoundingSet=
 
 # Tell systemd it will receive a notification from collectd over its control
 # socket once the daemon is ready. See systemd.service(5) for more details.
 Type=notify
 
-# Restart the collectd daemon when it fails.
-Restart=on-failure
+Restart=always
+RestartSec=10
+StartLimitInterval=61s
+StandardOutput=syslog
+StandardError=syslog
 
 [Install]
 WantedBy=multi-user.target

@@ -285,6 +285,29 @@ static void disk_submit(const char *plugin_instance, const char *type,
   plugin_dispatch_values(&vl);
 } /* void disk_submit */
 
+static void disk_submit_gauge (const char *plugin_instance,
+                               const char *type, gauge_t value)
+{
+	value_t values[1];
+	value_list_t vl = VALUE_LIST_INIT;
+
+	/* Both `ignorelist' and `plugin_instance' may be NULL. */
+	if (ignorelist_match (ignorelist, plugin_instance) != 0)
+	  return;
+
+	values[0].gauge = value;
+
+	vl.values = values;
+	vl.values_len = 1;
+	sstrncpy (vl.host, hostname_g, sizeof (vl.host));
+	sstrncpy (vl.plugin, "disk", sizeof (vl.plugin));
+	sstrncpy (vl.plugin_instance, plugin_instance,
+			sizeof (vl.plugin_instance));
+	sstrncpy (vl.type, type, sizeof (vl.type));
+
+	plugin_dispatch_values (&vl);
+} /* void disk_submit_gauge */
+
 #if KERNEL_FREEBSD || KERNEL_LINUX
 static void submit_io_time(char const *plugin_instance, derive_t io_time,
                            derive_t weighted_time) {
@@ -298,7 +321,7 @@ static void submit_io_time(char const *plugin_instance, derive_t io_time,
   vl.values_len = STATIC_ARRAY_SIZE(values);
   sstrncpy(vl.plugin, "disk", sizeof(vl.plugin));
   sstrncpy(vl.plugin_instance, plugin_instance, sizeof(vl.plugin_instance));
-  sstrncpy(vl.type, "disk_io_time", sizeof(vl.type));
+  sstrncpy(vl.type, "disk_io_millis", sizeof(vl.type));
 
   plugin_dispatch_values(&vl);
 } /* void submit_io_time */
@@ -658,7 +681,7 @@ static int disk_read(void) {
   geom_stats_snapshot_free(snap);
 
 #elif KERNEL_LINUX
-  FILE *fh;
+  file *fh;
   char buffer[1024];
 
   char *fields[32];
@@ -673,20 +696,21 @@ static int disk_read(void) {
   derive_t write_ops = 0;
   derive_t write_merged = 0;
   derive_t write_time = 0;
-  gauge_t in_progress = NAN;
+  gauge_t in_progress = nan;
   derive_t io_time = 0;
   derive_t weighted_time = 0;
   int is_disk = 0;
+  gauge_t disk_count = 0;
 
   diskstats_t *ds, *pre_ds;
 
-  if ((fh = fopen("/proc/diskstats", "r")) == NULL) {
-    ERROR("disk plugin: fopen(\"/proc/diskstats\"): %s", STRERRNO);
+  if ((fh = fopen("/proc/diskstats", "r")) == null) {
+    error("disk plugin: fopen(\"/proc/diskstats\"): %s", strerrno);
     return -1;
   }
 
   poll_count++;
-  while (fgets(buffer, sizeof(buffer), fh) != NULL) {
+  while (fgets(buffer, sizeof(buffer), fh) != null) {
     int numfields = strsplit(buffer, fields, 32);
 
     /* need either 7 fields (partition) or at least 14 fields */
@@ -695,21 +719,21 @@ static int disk_read(void) {
 
     char *disk_name = fields[2];
 
-    for (ds = disklist, pre_ds = disklist; ds != NULL;
+    for (ds = disklist, pre_ds = disklist; ds != null;
          pre_ds = ds, ds = ds->next)
       if (strcmp(disk_name, ds->name) == 0)
         break;
 
-    if (ds == NULL) {
-      if ((ds = calloc(1, sizeof(*ds))) == NULL)
+    if (ds == null) {
+      if ((ds = calloc(1, sizeof(*ds))) == null)
         continue;
 
-      if ((ds->name = strdup(disk_name)) == NULL) {
+      if ((ds->name = strdup(disk_name)) == null) {
         free(ds);
         continue;
       }
 
-      if (pre_ds == NULL)
+      if (pre_ds == null)
         disklist = ds;
       else
         pre_ds->next = ds;
@@ -859,6 +883,8 @@ static int disk_read(void) {
                   ds->avg_write_time);
 
     if (is_disk) {
+      if (ignorelist_match (ignorelist, disk_name) == 0)
+        disk_count += 1;
       if (ds->has_merged)
         disk_submit(output_name, "disk_merged", read_merged, write_merged);
       if (ds->has_in_progress)
@@ -872,6 +898,7 @@ static int disk_read(void) {
     sfree(alt_name);
 #endif
   } /* while (fgets (buffer, sizeof (buffer), fh) != NULL) */
+  disk_submit_gauge ("", "disk_count", disk_count);
 
   /* Remove disks that have disappeared from diskstats */
   for (ds = disklist, pre_ds = disklist; ds != NULL;) {

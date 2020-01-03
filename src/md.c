@@ -19,6 +19,7 @@
  *   Michael Hanselmann
  **/
 
+#include <sys/sysmacros.h>
 #include "collectd.h"
 
 #include "plugin.h"

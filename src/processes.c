@@ -881,6 +881,15 @@ static void ps_submit_proc_list(procstat_t *ps) {
     vl.values[0].gauge = ps->num_fd;
     vl.values_len = 1;
     plugin_dispatch_values(&vl);
+
+    /*
+     * For backwards-compat, also emit the fd count under the old name we used:
+     * "ps_fd_count".  This will keep whisper data all in the same place.
+     * */
+    sstrncpy(vl.type, "ps_fd_count", sizeof(vl.type));
+    vl.values[0].gauge = ps->num_fd;
+    vl.values_len = 1;
+    plugin_dispatch_values(&vl);
   }
 
   if (ps->num_maps > 0) {

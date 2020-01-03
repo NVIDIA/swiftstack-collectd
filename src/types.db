@@ -1,4 +1,4 @@
-absolute                value:ABSOLUTE:0:U
+ps_fd_count		value:GAUGE:0:9223372036854775807absolute                value:ABSOLUTE:0:U
 apache_bytes            value:DERIVE:0:U
 apache_connections      value:GAUGE:0:65535
 apache_idle_workers     value:GAUGE:0:65535
@@ -54,7 +54,8 @@ dilution_of_precision   value:GAUGE:0:U
 disk_allocation         value:GAUGE:0:U
 disk_capacity           value:GAUGE:0:U
 disk_error              value:GAUGE:0:U
-disk_io_time            io_time:DERIVE:0:U, weighted_io_time:DERIVE:0:U
+disk_io_millis	        io_millis:DERIVE:0:U, io_millis_weighted:DERIVE:0:U
+disk_count              value:GAUGE:0:U
 disk_latency            read:GAUGE:0:U, write:GAUGE:0:U
 disk_merged             read:DERIVE:0:U, write:DERIVE:0:U
 disk_octets             read:DERIVE:0:U, write:DERIVE:0:U
@@ -207,6 +208,7 @@ ps_cputime              user:DERIVE:0:U, syst:DERIVE:0:U
 ps_data                 value:GAUGE:0:9223372036854775807
 ps_disk_octets          read:DERIVE:0:U, write:DERIVE:0:U
 ps_disk_ops             read:DERIVE:0:U, write:DERIVE:0:U
+ps_fd_count		value:GAUGE:0:9223372036854775807
 ps_pagefaults           minflt:DERIVE:0:U, majflt:DERIVE:0:U
 ps_rss                  value:GAUGE:0:9223372036854775807
 ps_stacksize            value:GAUGE:0:9223372036854775807

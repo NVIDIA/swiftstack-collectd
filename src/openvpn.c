@@ -99,6 +99,25 @@ static int openvpn_strsplit(char *string, char **fields, size_t size) {
   char *saveptr = NULL;
 
   while ((fields[i] = strtok_r(ptr, ",\t", &saveptr)) != NULL) {
+    /* Account for any empty fields skipped */
+    /* Empty fields will get a fields[x] entry which will be a pointer to the
+     * terminating NUL byte of a zero-byte string within the input string. */
+    char *last_start = i == 0 ? string : fields[i-1];
+    int last_size = i == 0 ? -1 : strlen(fields[i-1]);
+    int empty_count = (int)(fields[i] - last_start) - last_size - 1;
+    if (empty_count > 0) {
+      char *final_val = fields[i];
+      int j;
+      for (j = empty_count; j > 0; j--) {
+        /* Assign the NUL byte in just in case strtok_r() doesn't convert every
+         * delimiter in the run to NUL bytes. */
+        *(final_val - j) = '\0';
+        fields[i] = final_val - j;
+        i++;
+      }
+      fields[i] = final_val;
+    }
+
     ptr = NULL;
     i++;
 
@@ -374,8 +393,8 @@ static int multi2_read(const char *name, FILE *fh) {
     /* Check if the data line fields count matches header line. */
     if (fields_num != columns) {
       ERROR("openvpn plugin: File format error in instance %s: Fields count "
-            "mismatch.",
-            name);
+            "mismatch; fields_num(%d) != columns(%d).",
+            name, fields_num, columns);
       return -1;
     }
 
