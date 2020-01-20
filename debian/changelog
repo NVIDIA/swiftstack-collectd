@@ -1,5 +1,6 @@
-ss-collectd (5.10.0.1-7) bionic; urgency=medium
+ss-collectd (5.10.0.1-8) bionic; urgency=medium
 
+  * -8: types.db was still bad in the -7 packaging(!)
   * -7: include netlink stuff for process delay accounting
   * -6: compile with --enable-debug
   * -5: fix types.db typo
