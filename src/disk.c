@@ -2,6 +2,7 @@
  * collectd - src/disk.c
  * Copyright (C) 2005-2012  Florian octo Forster
  * Copyright (C) 2009       Manuel Sanmartin
+ * Copyright (C) 2020-2021  NVIDIA CORPORATION
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,6 +20,7 @@
  * Authors:
  *   Florian octo Forster <octo at collectd.org>
  *   Manuel Sanmartin
+ *   Darrell Bishop <dbishop at nvidia.com>
  **/
 
 #include "collectd.h"

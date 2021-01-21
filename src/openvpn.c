@@ -4,6 +4,7 @@
  * Copyright (C) 2009,2010  Florian octo Forster
  * Copyright (C) 2009       Marco Chiappero
  * Copyright (C) 2009       Fabian Schuh
+ * Copyright (C) 2020-2021  NVIDIA CORPORATION
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,6 +25,7 @@
  *   Marco Chiappero <marco at absence.it>
  *   Fabian Schuh <mail at xeroc.org>
  *   Pavel Rochnyak <pavel2000 ngs.ru>
+ *   Darrell Bishop <dbishop at nvidia.com>
  **/
 
 #include "collectd.h"

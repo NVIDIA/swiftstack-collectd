@@ -8,6 +8,7 @@
  * Copyright (C) 2009       Manuel Sanmartin
  * Copyright (C) 2010       Clément Stenac
  * Copyright (C) 2012       Cosmin Ioiart
+ * Copyright (C) 2020-2021  NVIDIA CORPORATION
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,6 +35,7 @@
  *   Cosmin Ioiart <cioiart at gmail.com>
  *   Pavel Rochnyack <pavel2000 at ngs.ru>
  *   Wilfried Goesgens <dothebart at citadel.org>
+ *   Darrell Bishop <dbishop at nvidia.com>
  **/
 
 #include "collectd.h"
