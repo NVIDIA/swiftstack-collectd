@@ -1141,7 +1141,6 @@ static void *cpy_interactive(void *pipefd) {
 #else
   PyOS_AfterFork_Child();
 #endif
-  PyEval_InitThreads();
   close(*(int *)pipefd);
   PyRun_InteractiveLoop(stdin, "<stdin>");
   PyOS_setsig(SIGINT, cur_sig);
@@ -1178,7 +1177,6 @@ static int cpy_init(void) {
       ;
     (void)close(pipefd[0]);
   } else {
-    PyEval_InitThreads();
     state = PyEval_SaveThread();
   }
   CPY_LOCK_THREADS
